@@ -4,6 +4,7 @@ require("colors").enable();
 const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const client = require("./util/connectPostgres");
 const app = express();
 
 // Importing Utilities
