@@ -126,17 +126,16 @@ router.post("/register", async (req, res) => {
     const created_at = new Date().toISOString().split("T")[0];
 
     // Inserting User in the Database
-    const insertQuery = `BEGIN;
+    const insertQuery = `WITH new_user as (
                          INSERT INTO users (user_name, email, passcode, created_at)
-                         VALUES ( ${insertion(user_name)},
-                                  ${insertion(email)},
-                                  ${insertion(hashedPassword)},
-                                  ${insertion(created_at)}
-                                );
-                         INSERT INTO audio (user_id) 
-                         VALUES(lastval());
-                         COMMIT;
-                         `;
+                         VALUES (${insertion(user_name)}, 
+                                 ${insertion(email)}, 
+                                 ${insertion(hashedPassword)}, 
+                                 ${insertion(created_at)})
+                         returning id
+                         )
+                         INSERT INTO audio (user_id)
+                         VALUES ((SELECT id FROM new_user));`;
 
     await client.query(insertQuery);
 
