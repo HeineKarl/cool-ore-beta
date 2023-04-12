@@ -12,7 +12,10 @@ const insertion = require("../../util/postgresService");
 const client = require("../../util/connectPostgres");
 
 client.connect((err) => {
-  if (err) throw err;
+  if (err) {
+    console.log("Something is wrong with the DB Connection" + err);
+    throw err;
+  }
   console.log("PG Connected");
 });
 
