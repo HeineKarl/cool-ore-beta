@@ -1,0 +1,96 @@
+.auth {
+  padding: 2rem;
+  height: var(--main-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__form {
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    &:hover {
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__heading {
+    margin-bottom: 1rem;
+    font-weight: 900;
+    font-size: 1.5rem;
+  }
+
+  &__reroute {
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+
+    a {
+      text-decoration: underline;
+      color: blue;
+      font-size: 0.75rem;
+    }
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    width: clamp(14rem, 50vw, 17rem);
+
+    label {
+      font-size: 0.85rem;
+    }
+
+    input {
+      outline: 0;
+      padding: 0.25rem 0.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  &__message {
+    margin-bottom: 1rem;
+
+    &.fail {
+      background-color: firebrick;
+      color: white;
+    }
+
+    &.success {
+      background-color: seagreen;
+      color: white;
+    }
+
+    span {
+      color: inherit;
+      font-size: 0.85rem;
+      padding: 0.65rem 1.5rem;
+      text-align: center;
+    }
+  }
+
+  &__btn {
+    @include font(0.85rem, $weight: 500);
+    background-color: var(--dark-color);
+    span {
+      color: var(--light-color);
+    }
+  }
+}
+
+@media (min-width: $min-width-tablet) {
+  form {
+    padding: 3rem 2rem;
+  }
+}

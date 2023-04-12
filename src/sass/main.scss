@@ -1,0 +1,274 @@
+$min-width-tablet: 45rem;
+$min-width-desktop: 60rem;
+
+@mixin reset() {
+  @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;900&display=swap");
+
+  // Universal
+  // --primary-color: hsl(43, 30%, 95%); //Universal
+  // --secondary-color: hsl(0, 0%, 9%); // Universal
+
+  // Blue
+  // --primary-color: hsl(241, 98%, 25%); // Blue
+  // --secondary-color: hsl(199, 100%, 96%); // Blue
+
+  // Green
+  // --primary-color: hsl(115, 100%, 50%); // Green
+  // --secondary-color: hsl(199, 100%, 96%); // Green
+
+  // Red
+  // --primary-color: hsl(0, 100%, 50%); // Red
+  // --secondary-color: hsl(0, 0%, 9%); // Red
+
+  // Blue-Violet
+  // --primary-color: hsl(271, 76%, 53%); // Blue-Violet
+  // --secondary-color: hsl(0, 0%, 9%); // Blue-Violet
+
+  :root {
+    --primary-color: #f6f4ee; //Universal
+    --secondary-color: #171717; // Universal
+
+    --primary-color-200: #fbfbf9;
+    --primary-color-600: #e8e6e2;
+    --secondary-color-200: #1b1b1b;
+    --secondary-color-600: #101010;
+
+    --light-color-200: #fbfbf9;
+    --light-color-400: #f6f4ee;
+    --light-color-600: #e8e6e2;
+    --dark-color-200: #1b1b1b;
+    --dark-color-400: #171717;
+    --dark-color-600: #101010;
+
+    --accent-color: #fca400;
+    // --primary-color: #04017d;
+    // --dark-color: #171717;
+    --dark-color: hsl(0, 0%, 9%);
+    // --light-color: #ecf9ff;
+    --light-color: hsl(199, 100%, 96%);
+    --success-color: #175f36;
+    --alert-color: #941010;
+    --mont: "Montserrat", sans-serif;
+
+    --header-height: 12vh;
+    --main-height: 84vh;
+    --footer-height: 4vh;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  body,
+  main {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-family: var(--mont);
+    overflow: hidden;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+
+    // &:hover,
+    // &:active,
+    // &:focus {
+    //   font-size: 1.25rem;
+    //   font-weight: 500;
+    // }
+  }
+
+  // button {
+  //   background-color: black;
+  //   color: white;
+  //   outline: 0;
+  //   border: 0;
+  //   padding: 0.35rem 0.5rem;
+  //   border-radius: 5px;
+  // }
+
+  // .v-list {
+  //   &:hover,
+  //   &:active,
+  //   &:focus {
+  //     font-size: 1rem;
+  //     font-weight: 500;
+  //   }
+  // }
+
+  // .v-list-item {
+  //   &:hover,
+  //   &:active,
+  //   &:focus {
+  //     font-size: 1rem;
+  //     font-weight: 500;
+  //   }
+  // }
+
+  // .v-list-item-title {
+  //   &:hover,
+  //   &:active,
+  //   &:focus {
+  //     font-size: 1rem;
+  //     font-weight: 500;
+  //   }
+  // }
+
+  .ponder {
+    background: green;
+  }
+
+  footer {
+    @include flex();
+    @include font(0.85rem, $weight: 300);
+    // margin-top: 2rem;
+    height: var(--footer-height);
+
+    background-color: var(--dark-color);
+    color: var(--primary-color);
+  }
+
+  .router-link-active {
+    text-decoration: underline;
+  }
+}
+
+@mixin utility-classes {
+  .light-text {
+    color: var(--light-color);
+  }
+
+  .dark-text {
+    color: var(--dark-color);
+  }
+
+  .set-hidden {
+    display: none;
+  }
+}
+
+@mixin skeleton-loader {
+  .skeleton-loader-img {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+    border-radius: 0.25rem;
+  }
+
+  .skeleton-loader-tag {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+    width: 4rem;
+    height: 0.75rem;
+    border-radius: 0.25rem;
+  }
+
+  .skeleton-loader-text {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+    width: 90%;
+    height: 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background: hsl(200, 20%, 70%);
+    }
+    100% {
+      background: hsl(200, 20%, 95%);
+    }
+  }
+}
+
+@mixin flex($align: center, $justify: center, $dir: row, $gap: 0) {
+  display: flex;
+  flex-direction: $dir;
+  gap: $gap;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+@mixin grid-columns($repeat: 1, $fr: 1fr, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat($repeat, $fr);
+  gap: $gap;
+}
+
+@mixin grid-rows($repeat: 1, $fr: 1fr, $gap: 1rem) {
+  display: grid;
+  grid-template-rows: repeat($repeat, $fr);
+  gap: $gap;
+}
+
+@mixin position(
+  $position: static,
+  $tl: false,
+  $tr: false,
+  $bl: false,
+  $br: false,
+  $y: 0,
+  $x: 0,
+  $mid: false
+) {
+  position: $position;
+
+  @if $mid {
+    top: $y;
+    left: $x;
+    transform: translate(-$x, -$y);
+  }
+
+  @if $tl {
+    top: $y;
+    left: $x;
+  }
+  @if $tr {
+    top: $y;
+    right: $x;
+  }
+  @if $bl {
+    bottom: $y;
+    left: $x;
+  }
+  @if $br {
+    bottom: $y;
+    right: $x;
+  }
+}
+
+@mixin shape($w, $h, $shape-clr: rgba(5, 5, 5, 0.5)) {
+  content: "";
+  background: $shape-clr;
+  width: $w;
+  height: $h;
+}
+
+@mixin font($size, $family: var(--mont), $weight: 400, $clr: #000) {
+  font: $weight $size $family;
+  color: $clr;
+}
+
+// Tablet min-width: 40rem;
+// Desktop min-width: 64rem;
