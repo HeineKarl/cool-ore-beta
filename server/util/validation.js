@@ -1,6 +1,7 @@
 const { decrypt, verifyToken, parseJwt } = require("./tokenService");
 
 const knexService = require("./knexService");
+const { destructureJWT } = require("./textService");
 const knexUser = new knexService("authorization");
 
 async function validation(req, res, next) {
@@ -29,8 +30,16 @@ async function validation(req, res, next) {
       });
     }
 
+    // Rumble JWT
+    const secret = {
+      jwtHeader: process.env.JWT_HEADER,
+      jwtPayload: process.env.JWT_PAYLOAD,
+      jwtSecret: process.env.JWT_SECRET,
+    };
+    const destructedJWT = destructureJWT(decryptedCookie, secret);
+
     const validCookie = await verifyToken(
-      decryptedCookie,
+      destructedJWT,
       process.env.ACCESS_TOKEN_SECRET
     );
 

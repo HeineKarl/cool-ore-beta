@@ -25,13 +25,20 @@ const {
   generateRefreshToken,
   verifyToken,
   encrypt,
+  decrypt,
 } = require("../../util/tokenService");
 
 const { refreshTime, nextWeek } = require("../../util/timeService");
 
 // Validation
 const validation = require("../../util/validation");
-const { properCase } = require("../../util/textService");
+const {
+  properCase,
+  constructureStr,
+  destructureStr,
+  constructureJWT,
+  destructureJWT,
+} = require("../../util/textService");
 
 // Getting all users
 router.get("/all", async (req, res) => {
@@ -92,8 +99,6 @@ router.get("/:id", async (req, res) => {
 
     const { id } = req.params;
     const getQuery = `SELECT * FROM users WHERE id = ${id}`;
-
-    console.log(id);
 
     client.query(getQuery, (err, result) => {
       if (!err)
@@ -198,14 +203,55 @@ router.post("/login", async (req, res) => {
     const accessToken = await generateAccessToken({ id });
     const refreshToken = await generateRefreshToken({ id });
 
-    const encryptedAccessToken = await encrypt(accessToken);
+    // Rumble JWT
+    const secret = {
+      jwtHeader: process.env.JWT_HEADER,
+      jwtPayload: process.env.JWT_PAYLOAD,
+      jwtSecret: process.env.JWT_SECRET,
+    };
+    const constructedJWTAccess = constructureJWT(accessToken, secret);
+    const constructedJWTRefresh = constructureJWT(refreshToken, secret);
+
+    // Encrypt JWT
+    const encryptedAccessToken = await encrypt(constructedJWTAccess);
 
     // Assigning Refresh Token to the Database
     const updateQueryById = `UPDATE users
-                          SET refresh_token = ${insertion(refreshToken)}
+                          SET refresh_token = ${insertion(
+                            constructedJWTRefresh
+                          )}
                           WHERE id = ${id}
                         `;
     await client.query(updateQueryById);
+
+    const getQueryById = `SELECT *
+                          FROM users
+                          FULL OUTER JOIN audio ON users.id=audio.user_id
+                          WHERE users.id = ${id}
+                          ORDER BY users.id;
+    `;
+
+    const user = await client.query(getQueryById);
+
+    const userData = user.rows[0];
+
+    const credentials = {
+      id: userData.id,
+      user_name: userData.user_name,
+      first_name: userData.first_name,
+      last_name: userData.last_name,
+      age: userData.age,
+      gender: userData.gender,
+      vision_type: userData.vision_type,
+      bio: userData.bio,
+      profile_image: userData.profile_image,
+      color_theme: userData.color_theme,
+      email: userData.email,
+      audio_accent: userData.audio_accent,
+      audio_pitch: userData.audio_pitch,
+      audio_speed: userData.audio_speed,
+      audio_volume: userData.audio_volume,
+    };
 
     // Send the information to the client
     res
@@ -217,14 +263,8 @@ router.post("/login", async (req, res) => {
       })
       .status(200)
       .json({
-        user: {
-          id,
-          name: user_name,
-          email,
-          img: profile_image,
-          token: encryptedAccessToken,
-        },
-        message: "Sucessfully Logged In",
+        user: credentials,
+        msg: "Sucessfully Logged In",
         ok: true,
       });
   } catch (error) {
@@ -258,17 +298,26 @@ router.post("/logout", async (req, res) => {
 router.post("/token", validation, async (req, res) => {
   console.log("Token Router".underline.green);
   try {
+    // Initializes Secrets JWT
+    const secret = {
+      jwtHeader: process.env.JWT_HEADER,
+      jwtPayload: process.env.JWT_PAYLOAD,
+      jwtSecret: process.env.JWT_SECRET,
+    };
+
     // Getting the information from the User
     const expired = new Date(req.cookieToken.exp * 1000);
     const now = new Date();
     // if the token expires in 1h, the refresh time should half
     const time = refreshTime(expired, process.env.EXPIRATION_TIME);
 
-    // const user = await knexUser.getDataById(req.cookieToken.id);
     const getQueryById = `SELECT *
                           FROM users
-                          WHERE id = ${req.cookieToken.id}
+                          FULL OUTER JOIN audio ON users.id=audio.user_id
+                          WHERE users.id = ${req.cookieToken.id}
+                          ORDER BY users.id;
                           `;
+
     const user = await client.query(getQueryById);
 
     const {
@@ -281,11 +330,14 @@ router.post("/token", validation, async (req, res) => {
       vision_type,
       bio,
       profile_image,
+      color_theme,
       email,
       refresh_token,
+      audio_accent,
+      audio_pitch,
+      audio_speed,
+      audio_volume,
     } = user.rows[0];
-
-    // console.log;
 
     // Validation
     if (refresh_token == null) {
@@ -293,8 +345,12 @@ router.post("/token", validation, async (req, res) => {
       return res.status(401).json({ message: "Unauthorized", ok: false });
     }
 
+    // Reorder JWT
+    const destructedJWT = destructureJWT(refresh_token, secret);
+
+    // Validating Token
     const validToken = await verifyToken(
-      refresh_token,
+      destructedJWT,
       process.env.REFRESH_TOKEN_SECRET
     );
 
@@ -309,19 +365,29 @@ router.post("/token", validation, async (req, res) => {
 
     // Generate Token and Secretkey
     const newAccessToken = await generateAccessToken({ id });
-    const encryptedAccessToken = await encrypt(newAccessToken);
+
+    // Rumble JWT
+    const constructedJWT = constructureJWT(newAccessToken, secret);
+
+    // Encrypt JWT
+    const encryptedAccessToken = await encrypt(constructedJWT);
 
     const credentials = {
       id,
       user_name,
-      profile_image,
-      email,
       first_name,
       last_name,
       age,
       gender,
       vision_type,
       bio,
+      profile_image,
+      color_theme,
+      email,
+      audio_accent,
+      audio_pitch,
+      audio_speed,
+      audio_volume,
     };
 
     if (now >= time) {
@@ -333,7 +399,7 @@ router.post("/token", validation, async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    res.header("auth", encryptedAccessToken).status(200).json({
       user: credentials,
       message: "Data Acquired",
       ok: true,
@@ -363,8 +429,6 @@ router.put("/profile", async (req, res) => {
       vision_type,
       bio,
     } = req.body;
-
-    console.log(req.body);
 
     // Update the Data in the Database
     const updateQueryById = `UPDATE users 

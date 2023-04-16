@@ -1,5 +1,6 @@
 const { Client } = require("pg");
 
+// Local Server
 // const client = new Client({
 //   host: "localhost",
 //   user: "postgres",
@@ -8,6 +9,8 @@ const { Client } = require("pg");
 //   database: "postgres",
 // });
 // postgres://cooloredb_eway_user:kaxOsU8Sd7vszQ9lVBCyZMnQohvQNbIc@dpg-cgpo3s0u9tun42tu9cf0-a.oregon-postgres.render.com/cooloredb_eway_d23b
+
+// Render Server
 const client = new Client({
   host: "dpg-cgpo3s0u9tun42tu9cf0-a",
   ssl: true,
