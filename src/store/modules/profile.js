@@ -16,6 +16,7 @@ export const profile = {
       updateUserProfile(userProfile);
     },
     selectedFile(state, profile_image) {
+      console.log(profile_image);
       state.profile_image = profile_image;
     },
   },

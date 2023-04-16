@@ -84,7 +84,7 @@ export default defineComponent({
     const router = useRoute();
     // const currentName = ref(state.colors.colorTheme);
 
-    dispatch("generateToken", { routename: router.name });
+    // dispatch("generateToken", { routename: router.name });
     // dispatch("colors/getColor", {
     //   user_id: parseInt(sessionStorage.getItem("id")),
     // });
@@ -118,6 +118,10 @@ export default defineComponent({
 }
 .appearance {
   @include flex($dir: column, $gap: 3rem);
+
+  // For the Navigation Thingy
+  margin: var(--header-height) 0 0;
+  // For the Navigation Thingy
   padding: 3rem 2rem;
   &__heading {
     @include font(1.5rem, $weight: 600, $clr: var(--secondary-color));

@@ -1,74 +1,11 @@
 <template>
   <v-app>
     <v-main>
-      <header v-if="state.templateValidation" class="header">
+      <header class="header app-bar">
         <div class="header__inner">
           <Logo @mouseover="textToSpeech" />
+          <h1 class="header__logo-name">Cool-ore</h1>
           <v-spacer></v-spacer>
-          <v-navigation-drawer
-            class="header__navigation"
-            v-model="isNavOpen"
-            location="right"
-            temporary
-          >
-            <div class="header__subheader">
-              <Logo @mouseover="textToSpeech" />
-              <CloseBtn @click="navigation" />
-            </div>
-
-            <div class="header__links">
-              <ul class="header__pages">
-                <div class="header__pages__title">
-                  <span>Pages</span>
-                </div>
-                <NavigationList :lists="state.navigationList.navigationLists" />
-              </ul>
-
-              <ul v-if="state.user" class="header__settings">
-                <div class="header__settings__title">
-                  <span>Settings</span>
-                </div>
-                <NavigationList :lists="state.navigationList.settingsLists" />
-              </ul>
-
-              <ul class="header__account">
-                <div class="header__account__title">
-                  <span>Account</span>
-                </div>
-                <v-list density="compact" active-class="header__nav-active" nav>
-                  <v-list-item
-                    v-if="!state.user"
-                    class="header__lists header__login"
-                    value="login"
-                    :to="{ name: state.navigationList.login.name }"
-                  >
-                    <template v-slot:prepend>
-                      <v-icon :icon="state.navigationList.login.icon"></v-icon>
-                    </template>
-
-                    <v-list-item-title
-                      v-text="state.navigationList.login.text"
-                    ></v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    v-else
-                    class="header__lists header__logout"
-                    value="logout"
-                    :to="{ name: state.navigationList.logout.name }"
-                    @click="state.navigationList.logout.func()"
-                  >
-                    <template v-slot:prepend>
-                      <v-icon :icon="state.navigationList.logout.icon"></v-icon>
-                    </template>
-
-                    <v-list-item-title
-                      v-text="state.navigationList.logout.text"
-                    ></v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </ul>
-            </div>
-          </v-navigation-drawer>
 
           <div class="header__collection">
             <v-btn
@@ -81,6 +18,16 @@
               Login
             </v-btn>
 
+            <v-btn
+              @mouseover="textToSpeech"
+              v-if="state.user"
+              class="header__vision"
+              elevation="0"
+              :to="{ name: 'vision-test' }"
+            >
+              Vision Test
+            </v-btn>
+
             <v-app-bar-nav-icon
               @click="navigation"
               class="header__burger"
@@ -88,8 +35,94 @@
             ></v-app-bar-nav-icon>
           </div>
         </div>
+        <v-progress-linear
+          v-if="state.progressShow"
+          class="header__progress"
+          :model-value="state.progressVal"
+        ></v-progress-linear>
       </header>
-      <router-view />
+
+      <v-navigation-drawer
+        class="header__navigation"
+        v-model="isNavOpen"
+        location="right"
+        temporary
+      >
+        <v-card v-if="state.user" variant="outlined" class="header__profile">
+          <div class="header__profile-inner">
+            <v-card-title class="header__profile-name">{{
+              state.user.user_name
+            }}</v-card-title>
+            <v-card-text class="header__profile-text">{{
+              state.user.bio.slice(0, 30) + "..."
+            }}</v-card-text>
+          </div>
+          <v-avatar size="50">
+            <img :src="state.user.profile_image" />
+          </v-avatar>
+        </v-card>
+
+        <div v-else class="header__subheader">
+          <Logo @mouseover="textToSpeech" />
+          <CloseBtn @click="navigation" />
+        </div>
+
+        <div class="header__links">
+          <ul class="header__pages">
+            <div class="header__pages__title">
+              <span>Pages</span>
+            </div>
+            <NavigationList :lists="state.navigationList.navigationLists" />
+          </ul>
+
+          <ul v-if="state.user" class="header__settings">
+            <div class="header__settings__title">
+              <span>Settings</span>
+            </div>
+            <NavigationList :lists="state.navigationList.settingsLists" />
+          </ul>
+
+          <ul class="header__account">
+            <div class="header__account__title">
+              <span>Account</span>
+            </div>
+            <v-list density="compact" active-class="header__nav-active" nav>
+              <v-list-item
+                v-if="!state.user"
+                class="header__lists header__login"
+                value="login"
+                :to="{ name: state.navigationList.login.name }"
+              >
+                <template v-slot:prepend>
+                  <v-icon :icon="state.navigationList.login.icon"></v-icon>
+                </template>
+
+                <v-list-item-title
+                  v-text="state.navigationList.login.text"
+                ></v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                v-else
+                class="header__lists header__logout"
+                value="logout"
+                :to="{ name: state.navigationList.logout.name }"
+                @click="state.navigationList.logout.func()"
+              >
+                <template v-slot:prepend>
+                  <v-icon :icon="state.navigationList.logout.icon"></v-icon>
+                </template>
+
+                <v-list-item-title
+                  v-text="state.navigationList.logout.text"
+                ></v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </ul>
+        </div>
+      </v-navigation-drawer>
+
+      <router-view v-if="state.templateValidation" />
+
       <footer v-if="state.templateValidation">
         Design and Created 2023 | Cool-ore
       </footer>
@@ -98,6 +131,7 @@
         class="home__dialog"
         persistent
         v-model="state.textToSpeech.dialog"
+        width="400"
       >
         <v-card>
           <v-card-text> Do you want to read it for you? </v-card-text>
@@ -124,9 +158,21 @@ export default defineComponent({
   name: "App",
   components: { Logo, CloseBtn, NavigationList },
   setup() {
+    const appBarElevation = ref(0);
+
+    window.addEventListener("scroll", (e) => {
+      if (document.querySelector("html").scrollTop === 0) {
+        document.querySelector(".app-bar").classList.remove("elevated");
+      } else {
+        document.querySelector(".app-bar").classList.add("elevated");
+      }
+    });
+
     // Initialize Store and Ref
     const { state, commit, dispatch } = useStore();
     const isNavOpen = ref(false);
+
+    dispatch("generateToken");
 
     // Get the voices of the Audio Synthesis
     let voices, accents, accent, pitch, rate, volume, defaultVoice;
@@ -156,22 +202,7 @@ export default defineComponent({
     });
 
     // If user is not log in
-    if (!sessionStorage.getItem("id")) {
-      commit("setTemplateValidation");
-    } else {
-      commit("textToSpeech/getAudio", {
-        id: parseInt(sessionStorage.getItem("id")),
-      });
-
-      // Set Color Theme
-      dispatch("colors/getColor", {
-        user_id: parseInt(sessionStorage.getItem("id")),
-      });
-
-      setTimeout(() => {
-        commit("colors/setColor", state.colors.colorTheme);
-      }, 300);
-    }
+    if (!sessionStorage.getItem("id")) commit("setTemplateValidation");
 
     function textToSpeech(e) {
       commit("textToSpeech/textToSpeech", {
@@ -201,6 +232,7 @@ export default defineComponent({
       handleDialog,
       state,
       isNavOpen,
+      appBarElevation,
     };
   },
 });
@@ -210,15 +242,44 @@ export default defineComponent({
 @include reset();
 @import "./sass/_auth";
 
+.v-progress-linear__determinate {
+  background-color: var(--success-color);
+}
+
+.app-bar {
+  // @include flex($justify: space-between);
+  background-color: var(--primary-color);
+  opacity: 0.99;
+  width: 100%;
+  // height: var(--header-height);
+  min-height: var(--header-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 0px 1px 0 var(--secondary-color);
+  transition: all 200ms ease;
+}
+
+.app-bar.elevated {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
 .header {
-  height: var(--header-height);
-  outline: 1px solid var(--secondary-color);
+  width: 100%;
+  // height: var(--header-height);
+
   &__inner {
     @include flex($justify: space-between);
     margin: 0 2rem;
   }
 
+  &__logo-name {
+    display: none;
+  }
+
   &__navigation {
+    // @include flex($dir: column, $gap: 1rem);
     background-color: var(--primary-color);
     color: var(--secondary-color);
   }
@@ -237,9 +298,41 @@ export default defineComponent({
     background-color: var(--primary-color);
   }
 
-  &__login {
+  &__login,
+  &__vision {
     background-color: var(--success-color);
     color: var(--light-color);
+  }
+
+  &__vision {
+    display: none;
+  }
+
+  &__profile {
+    @include flex($gap: 1rem, $dir: row-reverse);
+    background-color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+    margin: 1.5rem 1rem;
+    padding: 0.5rem 0;
+    // padding: 1rem 2rem 1rem 1rem;
+
+    &-inner {
+      @include flex($dir: column, $align: flex-start);
+      // height: 2rem;
+    }
+
+    &-name {
+      @include font(1rem, $weight: 600, $clr: var(--secondary-color));
+      margin: 0;
+      padding: 0;
+    }
+
+    &-text {
+      @include font(0.75rem, $weight: 400, $clr: var(--secondary-color));
+      margin: 0;
+      padding: 0;
+    }
+    // height: 6rem;
   }
 
   &__subheader {
@@ -298,6 +391,15 @@ export default defineComponent({
 
 footer {
   color: var(--secondary-color);
+}
+
+@media (min-width: $min-width-tablet) {
+  .header {
+    &__logo-name,
+    &__vision {
+      @include flex();
+    }
+  }
 }
 
 // @media (min-width: $min-width-tablet) {

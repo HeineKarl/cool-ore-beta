@@ -32,11 +32,6 @@ const routes = [
     component: () => import("../views/ContactView.vue"),
   },
   {
-    path: "/article",
-    name: "article",
-    component: () => import("../views/ArticleView.vue"),
-  },
-  {
     path: "/settings",
     name: "settings",
     component: () => import("../views/SettingsView.vue"),
@@ -61,6 +56,21 @@ const routes = [
     name: "change_password",
     component: () => import("../views/ChangePasswordView.vue"),
   },
+  {
+    path: "/vision-test",
+    name: "vision-test",
+    component: () => import("../views/VisionTestView.vue"),
+  },
+  {
+    path: "/article",
+    name: "article",
+    component: () => import("../views/ArticleView.vue"),
+  },
+  {
+    path: "/article/:id",
+    name: "article_detail",
+    component: () => import("../views/ArticleDetailView.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -68,7 +78,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, from, next) => {
   // console.log(!store.state.isGuest);
   if (!store.state.isGuest) {
     if (to.name == "login" || to.name == "register") {
@@ -76,6 +86,27 @@ router.beforeEach((to, from) => {
       return { name: from.name };
     }
   }
+
+  let documentTitle = `Cool-ore | ${properCase(to.name)}`;
+  if (to.params.title) {
+    documentTitle += ` - ${to.params.title}`;
+  }
+  document.title = documentTitle;
+
+  next();
 });
+
+function properCase(string) {
+  const splitText = string.toLowerCase().split(" ");
+  const text = splitText[0].charAt(0).toUpperCase() + splitText[0].substring(1);
+  splitText.shift();
+
+  const newArray = [text, ...splitText];
+
+  // txt[0];
+  // txt.join(" ");
+
+  return newArray.join(" ");
+}
 
 export default router;

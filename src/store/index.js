@@ -4,6 +4,8 @@ import { colorblind } from "./modules/colorblindTypes";
 import { navigationList } from "./modules/navigationList";
 import { colors } from "./modules/colors";
 import { profile } from "./modules/profile";
+import { visionTest } from "./modules/visionTest";
+import { article } from "./modules/article";
 
 import router from "@/router";
 import axios from "axios";
@@ -29,6 +31,8 @@ const store = createStore({
     lists: [],
     listname: "",
     isDone: false,
+    progressVal: 0,
+    progressShow: false,
   },
   mutations: {
     resetForm(state) {
@@ -39,8 +43,21 @@ const store = createStore({
       state.password = null;
       state.user = null;
     },
-    setTemplateValidation(state) {
+    setTemplateValidation(state, bool) {
+      if (bool) return (state.templateValidation = bool);
+
       state.templateValidation = !state.templateValidation;
+    },
+    setProgressBar(state, progress) {
+      state.progressVal = progress;
+      state.progressShow = true;
+
+      if (progress == 100) {
+        setTimeout(() => {
+          state.progressShow = false;
+          console.log(progress);
+        }, 500);
+      }
     },
   },
   actions: {
@@ -82,9 +99,9 @@ const store = createStore({
         state.user.profile_image = profile_image;
       }
 
-      setTimeout(async () => {
-        state.templateValidation = await response.data.ok;
-      }, 100);
+      // setTimeout(async () => {
+      //   state.templateValidation = await response.data.ok;
+      // }, 100);
     },
 
     async logoutUser({ state }) {
@@ -154,16 +171,22 @@ const store = createStore({
       }
 
       state.user = data.user;
-      state.message = data.message;
+      state.message = data.msg;
       state.ok = data.ok;
       state.templateValidation = true;
       state.validateUsingLogin = true;
       state.isGuest = false;
 
-      sessionStorage.setItem("id", data.user.id);
-      sessionStorage.setItem("uimg", data.user.img);
+      // Converting Byte Array to Base64
+      let bytesView, profile_image;
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      if (data.user.profile_image?.data) {
+        bytesView = new Uint8Array(data.user.profile_image.data);
+        profile_image = new TextDecoder().decode(bytesView);
+        state.user.profile_image = profile_image;
+      }
+
+      sessionStorage.setItem("id", data.user.user_id);
 
       setTimeout(async () => {
         await router.push({ name: "profile" });
@@ -177,6 +200,8 @@ const store = createStore({
     navigationList,
     colors,
     profile,
+    visionTest,
+    article,
   },
 });
 

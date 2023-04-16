@@ -129,6 +129,13 @@ export const textToSpeech = {
         state.isListening = !state.isListening;
       };
     },
+
+    setAudio(state, { accent, pitch, speed, volume }) {
+      state.accent = accent;
+      state.pitch = pitch;
+      state.rate = speed;
+      state.volume = volume;
+    },
     async getAudio(state, { id }) {
       const data = await getUserAudio(id);
 

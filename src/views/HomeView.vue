@@ -22,6 +22,36 @@
       </p>
     </section>
 
+    <section class="home__video">
+      <v-card class="home__video-card">
+        <div class="home__video-container">
+          <iframe
+            src="https://drive.google.com/file/d/1_ubgEdoyopREBV-ZRIUpS_wJBl18r1VK/preview"
+            allow="autoplay"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="home__video-content">
+          <v-card-title class="ma-0 pa-0" style="font-size: 1rem"
+            >Color Design</v-card-title
+          >
+          <v-spacer></v-spacer>
+          <v-btn icon elevation="0">
+            <v-icon>mdi-information</v-icon>
+          </v-btn>
+        </div>
+      </v-card>
+    </section>
+
+    <section class="home__info">
+      <h3>What is Cool-ore?</h3>
+      <p>
+        An easy navigational website that shows how people with color vision
+        deficiency locks into their vision and must comprehend better with it.
+      </p>
+    </section>
+
     <section class="home__faq">
       <h3>Frequently Asked Question</h3>
       <div class="home__vision-types">
@@ -49,14 +79,6 @@
         </v-expansion-panels>
       </div>
     </section>
-
-    <section class="home__info">
-      <h3>What is Cool-ore?</h3>
-      <p>
-        An easy navigational website that shows how people with color vision
-        deficiency locks into their vision and must comprehend better with it.
-      </p>
-    </section>
   </div>
 </template>
 
@@ -75,9 +97,7 @@ export default defineComponent({
   setup() {
     const { state, commit, dispatch } = useStore();
     const router = useRoute();
-    dispatch("generateToken", { routename: router.name });
-
-    console.log(router.name);
+    // dispatch("generateToken", { routename: router.name });
 
     function textToSpeech(e) {
       commit("textToSpeech/textToSpeech", {
@@ -104,7 +124,9 @@ export default defineComponent({
   color: var(--secondary-color);
 }
 .home {
-  margin: 2rem 2rem 0;
+  // For the Navigation Thingy
+  padding-top: var(--header-height);
+  margin: 2rem 2rem 1rem;
   @include flex($dir: column, $gap: 3rem);
 
   &__intro {
@@ -123,6 +145,32 @@ export default defineComponent({
     grid-row: 1;
     width: 15rem;
     opacity: 0.15;
+  }
+
+  &__video {
+    @include flex($dir: column);
+    width: 100%;
+    height: clamp(15rem, 60vw, 26rem);
+
+    &-card {
+      @include flex($dir: column);
+      width: clamp(15rem, 70vw, 100rem);
+      max-width: 40rem;
+    }
+
+    &-container {
+      width: 100%;
+      iframe {
+        width: 100%;
+        height: clamp(10rem, 50vw, 20rem);
+      }
+    }
+
+    &-content {
+      @include flex($justify: space-between);
+      width: 100%;
+      padding: 0 2rem;
+    }
   }
 
   &__faq {

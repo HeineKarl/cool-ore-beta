@@ -46,18 +46,6 @@
 // import { mapActions, mapMutations } from "vuex";
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
-// export default {
-//   name: "LoginView",
-//   methods: {
-//     ...mapActions(["verifyUser"]),
-//     ...mapMutations(["resetForm"]),
-//   },
-//   created() {
-//     this.resetForm();
-
-//     // console.log(this.$router.push("/"));
-//   },
-// };
 
 export default defineComponent({
   name: "LoginView",
@@ -81,4 +69,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.auth {
+  // For the Navigation Thingy
+  margin: var(--header-height) 0 0;
+}
 </style>

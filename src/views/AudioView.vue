@@ -78,6 +78,7 @@
       class="audio__dialog"
       persistent
       v-model="state.textToSpeech.isUpdateDialog"
+      width="400"
     >
       <v-card>
         <v-card-text>Do you really want to update?</v-card-text>
@@ -105,7 +106,7 @@ export default defineComponent({
     const { state, commit, dispatch } = useStore();
     const router = useRoute();
 
-    dispatch("generateToken", { routename: router.name });
+    // dispatch("generateToken", { routename: router.name });
 
     // commit("textToSpeech/getAudio", {
     //   id: parseInt(sessionStorage.getItem("id")),
@@ -146,6 +147,8 @@ export default defineComponent({
 
 .audio {
   @include flex($dir: column, $gap: 2rem);
+  // For the Navigation Thingy
+  margin: var(--header-height) 0;
   padding: 3rem 2rem;
 
   &__heading {

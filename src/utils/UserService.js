@@ -161,6 +161,7 @@ class UserService {
         const data = res.data;
         resolve(data);
       } catch (err) {
+        console.log(err);
         if (err.response.status == 401) {
           resolve(err.response.data);
           return;

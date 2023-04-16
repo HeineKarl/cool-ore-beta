@@ -1,7 +1,31 @@
 <template>
   <div class="article">
-    <v-icon class="icon">mdi-close-octagon</v-icon>
-    <h1>Article View is currently closed</h1>
+    <div class="article__heading">Articles</div>
+    <div class="article__cards">
+      <v-card
+        class="article__card"
+        v-for="article in state.article.articles"
+        :key="article.id"
+        :title="article.article.title"
+        :subtitle="article.author + ' | ' + article.date"
+        variant="tonal"
+      >
+        <v-card-text>{{
+          article.article.intro.desc.slice(0, 100) + " ......"
+        }}</v-card-text>
+        <v-card-actions>
+          <v-btn
+            :to="{
+              name: 'article_detail',
+              params: { id: article.id },
+            }"
+            variant="outlined"
+            block=""
+            >View</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </div>
   </div>
 </template>
 
@@ -11,10 +35,11 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
+  name: "article",
   setup() {
     const { state, dispatch } = useStore();
     const router = useRoute();
-    dispatch("generateToken", { routename: router.name });
+    // dispatch("generateToken", { routename: router.name });
     return {
       state,
     };
@@ -24,8 +49,23 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .article {
-  @include flex($dir: column);
-  height: 30rem;
+  // For the Navigation Thingy
+  margin: calc(var(--header-height) + 2rem) 0;
+  @include flex($dir: column, $gap: 1rem);
+  // height: 30rem;
+
+  &__heading {
+    @include font(2rem, $weight: 600, $clr: var(--secondary-color));
+  }
+
+  &__cards {
+    @include flex($dir: column, $gap: 1rem);
+  }
+
+  &__card {
+    width: clamp(15rem, 50vw, 30rem);
+    // height: 30rem;
+  }
 }
 
 .icon {

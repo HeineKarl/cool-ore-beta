@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const { state, dispatch } = useStore();
     const router = useRoute();
-    dispatch("generateToken", { routename: router.name });
+    // dispatch("generateToken", { routename: router.name });
     return {
       state,
     };

@@ -13,6 +13,7 @@
           <img
             :src="
               state.user.profile_image ||
+              state.profile.profile_image ||
               require('@/assets/img/default_profile.png')
             "
             :alt="state.user.user_name"
@@ -28,6 +29,8 @@
           v-model="state.user.user_name"
           id="username"
           type="text"
+          hint="12 characters only"
+          maxlength="12"
         >
           <!-- :focused="!!state.user.username" -->
         </v-text-field>
@@ -114,6 +117,7 @@
       class="profile__dialog"
       persistent
       v-model="state.profile.isUpdateDialog"
+      width="400"
     >
       <v-card>
         <v-card-text>Do you really want to update your account?</v-card-text>
@@ -143,7 +147,8 @@ export default defineComponent({
   setup() {
     const { state, commit, dispatch } = useStore();
     const router = useRoute();
-    dispatch("generateToken", { routename: router.name });
+
+    // dispatch("generateToken", { routename: router.name });
 
     const userId = sessionStorage.getItem("id");
     commit("navigationList/handleAccountList", userId);
@@ -171,18 +176,6 @@ export default defineComponent({
     }
 
     function handleUpdateDialog() {
-      const userProfiles = {
-        id: state.user.id,
-        userImage: state.user.userImage,
-        username: state.user.username,
-        firstname: state.user.firstname,
-        lastname: state.user.lastname,
-        age: state.user.age,
-        gender: state.user.gender,
-        colorVisionType: state.user.colorVisionType,
-        bio: state.user.bio,
-      };
-
       commit("profile/handleUpdateDialog");
     }
 
@@ -215,6 +208,9 @@ export default defineComponent({
 
 .profile {
   @include flex($dir: column, $gap: 2rem);
+
+  // For the Navigation Thingy
+  margin: var(--header-height) 0 0;
   padding: 3rem 2rem;
 
   &__pic {
@@ -288,7 +284,7 @@ export default defineComponent({
 
   .profile {
     @include flex($dir: column, $gap: 2rem, $align: flex-start);
-    padding: 3rem 2rem;
+    padding: 3rem 2rem 3rem 2rem;
 
     &__heading {
       margin-left: 2rem;
@@ -299,9 +295,9 @@ export default defineComponent({
         $dir: row-reverse,
         $align: flex-start,
         $justify: space-between,
-        $gap: 2.5rem
+        $gap: 1rem
       );
-
+      padding-right: clamp(2rem, 10vw, 8rem);
       width: 100%;
     }
 
