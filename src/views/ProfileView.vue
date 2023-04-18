@@ -12,11 +12,11 @@
         <div class="profile__img">
           <img
             :src="
-              state.user.profile_image ||
-              state.profile.profile_image ||
+              state.user?.profile_image ||
+              state.profile?.profile_image ||
               require('@/assets/img/default_profile.png')
             "
-            :alt="state.user.user_name"
+            :alt="state.user?.user_name"
           />
         </div>
       </div>
@@ -32,7 +32,6 @@
           hint="12 characters only"
           maxlength="12"
         >
-          <!-- :focused="!!state.user.username" -->
         </v-text-field>
         <v-text-field
           clearable
@@ -42,7 +41,6 @@
           id="firstname"
           type="text"
         >
-          <!-- :focused="!!state.user.firstname" -->
         </v-text-field>
         <v-text-field
           clearable
@@ -52,7 +50,6 @@
           id="lastname"
           type="text"
         >
-          <!-- :focused="!!state.user.lastname" -->
         </v-text-field>
 
         <div class="profile__container">
@@ -76,7 +73,6 @@
             v-model="state.user.gender"
             id="gender"
           >
-            <!-- :focused="!!state.user.gender" -->
           </v-select>
         </div>
         <v-select
@@ -94,7 +90,6 @@
           v-model="state.user.vision_type"
           id="cvt"
         >
-          <!-- :focused="!!state.user.colorVisionType" -->
         </v-select>
 
         <v-textarea
@@ -105,7 +100,6 @@
           id="bio"
           type="text"
         >
-          <!-- :focused="!!state.user.bio" -->
         </v-textarea>
         <div class="profile__cta">
           <SolidBtn @click="handleUpdateDialog" text="Update Profile" />
@@ -147,8 +141,6 @@ export default defineComponent({
   setup() {
     const { state, commit, dispatch } = useStore();
     const router = useRoute();
-
-    // dispatch("generateToken", { routename: router.name });
 
     const userId = sessionStorage.getItem("id");
     commit("navigationList/handleAccountList", userId);

@@ -260,12 +260,18 @@ export const colors = {
   },
   mutations: {
     setColor(state, colorName) {
+      console.log(!colorName);
+      if (!colorName) {
+        colorName = "light_mode";
+      }
+
       let allColors = [
         ...state.colorMode,
         ...state.colorSpecs,
         ...state.colorContrast,
       ];
       let colors = allColors.find((color) => color.name === colorName);
+
       let root = document.querySelector(":root");
 
       state.colorTheme = colorName;

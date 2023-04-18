@@ -69,8 +69,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+// .v-field__field,
+// .v-field__overlay,
+// .v-input__control {
+//   background-color: var(--primary-color);
+// }
 .auth {
   // For the Navigation Thingy
   margin: var(--header-height) 0 0;
+  input {
+    background-color: var(--primary-color);
+  }
 }
 </style>

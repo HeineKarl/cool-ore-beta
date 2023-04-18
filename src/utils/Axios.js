@@ -38,6 +38,8 @@ axios.interceptors.response.use(
     const duration =
       response.config.metadata.endTime - response.config.metadata.startTime;
 
+    store.commit("setDuration", duration);
+
     let progress = 0;
     const interval = setInterval(() => {
       // console.log("Home");
@@ -49,7 +51,7 @@ axios.interceptors.response.use(
       }
     }, 1000 / duration);
 
-    // Only Token commits user preferences
+    // Only Token and Login commits user preferences
     if (
       !response.config.url?.match("token") &&
       !response.config.url?.match("login")

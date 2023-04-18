@@ -3,7 +3,7 @@
     <v-main>
       <header class="header app-bar">
         <div class="header__inner">
-          <Logo @mouseover="textToSpeech" />
+          <Logo class="header__logo" @mouseover="textToSpeech" />
           <h1 class="header__logo-name">Cool-ore</h1>
           <v-spacer></v-spacer>
 
@@ -54,7 +54,7 @@
               state.user.user_name
             }}</v-card-title>
             <v-card-text class="header__profile-text">{{
-              state.user.bio.slice(0, 30) + "..."
+              state.user.bio ? state.user.bio.slice(0, 30) + "..." : null
             }}</v-card-text>
           </div>
           <v-avatar size="50">
@@ -121,7 +121,7 @@
         </div>
       </v-navigation-drawer>
 
-      <router-view v-if="state.templateValidation" />
+      <router-view />
 
       <footer v-if="state.templateValidation">
         Design and Created 2023 | Cool-ore
@@ -275,6 +275,8 @@ export default defineComponent({
   }
 
   &__logo-name {
+    @include font(1.5rem, $weight: 600, $clr: var(--secondary-color));
+    padding: 0 1rem;
     display: none;
   }
 
@@ -302,6 +304,7 @@ export default defineComponent({
   &__vision {
     background-color: var(--success-color);
     color: var(--light-color);
+    // color: var(--primary-color);
   }
 
   &__vision {

@@ -1,17 +1,23 @@
 <template>
   <div class="notfound">
-    <div class="heading">
-      <span>{{ this.$store.state.message }}</span>
+    <div class="notfound__heading">
+      <span>{{ state.message }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import { useStore } from "vuex";
+
 export default {
   setup() {
-    return {};
+    const { state } = useStore();
+
+    return { state };
   },
+
   created() {
+    console.log(this.$store.state.duration);
     setTimeout(() => {
       this.$router.push("/login");
     }, 2000);
@@ -19,18 +25,20 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style lang="scss" scoped>
 .notfound {
+  //  For the Navigation Thingy
+  margin: var(--header-height) 0 0;
+
   height: 84vh;
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.heading {
-  /* background-color: green; */
-  max-width: 25rem;
-  text-align: center;
-  font-size: 2rem;
+  &__heading {
+    max-width: 24rem;
+    text-align: center;
+    font-size: 2rem;
+  }
 }
 </style>

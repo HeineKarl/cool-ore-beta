@@ -18,6 +18,7 @@ const store = createStore({
   state: {
     templateValidation: false,
     validateUsingLogin: false,
+    duration: 0,
     test: null,
     accessToken: "",
     refreshToken: "",
@@ -35,6 +36,9 @@ const store = createStore({
     progressShow: false,
   },
   mutations: {
+    setDuration(state, duration) {
+      state.duration = duration;
+    },
     resetForm(state) {
       state.message = null;
       state.ok = false;
@@ -78,17 +82,27 @@ const store = createStore({
         response.status === 500
       ) {
         state.isGuest = true;
+        state.templateValidation = false;
         state.message = response.data.message;
 
         setTimeout(async () => {
+          console.log(state.message);
           await router.push("/notfound");
-        }, 1000);
+          sessionStorage.clear();
+        }, 500);
 
         return;
       }
 
       state.user = response.data.user;
       state.ok = response.data.ok;
+
+      // Set Null values to ""
+      Object.keys(state.user).forEach(
+        (accessor) =>
+          (state.user[accessor] =
+            state.user[accessor] === null ? "" : state.user[accessor])
+      );
 
       // Converting Byte Array to Base64
       let bytesView, profile_image;
@@ -190,7 +204,7 @@ const store = createStore({
 
       setTimeout(async () => {
         await router.push({ name: "profile" });
-      }, 500);
+      }, 3 * state.duration);
     },
   },
   getters: {},

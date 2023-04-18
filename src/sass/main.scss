@@ -26,26 +26,26 @@ $min-width-desktop: 60rem;
 
   :root {
     --primary-color: #f6f4ee; //Universal
-    --secondary-color: #171717; // Universal
+    --secondary-color: #2e2e2e; // Universal
 
     --primary-color-200: #fbfbf9;
     --primary-color-600: #e8e6e2;
     --secondary-color-200: #1b1b1b;
     --secondary-color-600: #101010;
 
-    --light-color-200: #fbfbf9;
-    --light-color-400: #f6f4ee;
-    --light-color-600: #e8e6e2;
-    --dark-color-200: #1b1b1b;
-    --dark-color-400: #171717;
-    --dark-color-600: #101010;
+    // --light-color-200: #fbfbf9;
+    // --light-color-400: #f6f4ee;
+    // --light-color-600: #e8e6e2;
+    // --dark-color-200: #1b1b1b;
+    // --dark-color-400: #171717;
+    // --dark-color-600: #101010;
 
-    --accent-color: #fca400;
+    // --accent-color: #fca400;
     // --primary-color: #04017d;
-    // --dark-color: #171717;
-    --dark-color: hsl(0, 0%, 9%);
-    // --light-color: #ecf9ff;
-    --light-color: hsl(199, 100%, 96%);
+    --dark-color: #171717;
+    // --dark-color: hsl(0, 0%, 9%);
+    --light-color: #ecf9ff;
+    // --light-color: hsl(199, 100%, 96%);
     --success-color: #175f36;
     --alert-color: #941010;
     --mont: "Montserrat", sans-serif;

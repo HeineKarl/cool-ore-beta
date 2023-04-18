@@ -48,6 +48,7 @@ export const navigationList = {
       text: "Logout",
       icon: "mdi-logout",
       func: () => {
+        store.commit("colors/setColor", "light_mode");
         store.dispatch("logoutUser");
       },
     },

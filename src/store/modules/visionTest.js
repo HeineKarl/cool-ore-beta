@@ -185,7 +185,7 @@ export const visionTest = {
         state.result.vision = "Normal Vision";
         state.result.desc =
           "All three types of cone cells, which are functioning normally, are used for normal color vision. Trichromacy is another name for normal color vision. Trichromats are people with normal color vision.";
-        return;
+        state.end = true;
       }
 
       if (state.end) return;
