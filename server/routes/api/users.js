@@ -4,8 +4,6 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 
 // Create Object
-const knexService = require("../../util/knexService");
-const knexUser = new knexService("authorization");
 const insertion = require("../../util/postgresService");
 
 // Client Postgres
@@ -308,6 +306,9 @@ router.post("/token", validation, async (req, res) => {
     // Getting the information from the User
     const expired = new Date(req.cookieToken.exp * 1000);
     const now = new Date();
+
+    console.log(expired, now, "EXPIRE AND NOW");
+
     // if the token expires in 1h, the refresh time should half
     const time = refreshTime(expired, process.env.EXPIRATION_TIME);
 

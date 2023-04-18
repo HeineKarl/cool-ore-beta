@@ -1,8 +1,8 @@
 const { decrypt, verifyToken, parseJwt } = require("./tokenService");
-
-const knexService = require("./knexService");
 const { destructureJWT } = require("./textService");
-const knexUser = new knexService("authorization");
+
+// Client Postgres
+const client = require("./connectPostgres");
 
 async function validation(req, res, next) {
   console.log("Validation Function".underline.magenta);
@@ -43,14 +43,25 @@ async function validation(req, res, next) {
       process.env.ACCESS_TOKEN_SECRET
     );
 
+    console.log(validCookie, "VALID COOKIE");
+
     if (validCookie.expired) {
       console.log(`Expired: ${validCookie.expired}`.red);
-      const { id } = parseJwt(decryptedCookie);
+      const { id } = parseJwt(destructedJWT);
 
-      await knexUser.updateData(id, {
-        refreshToken: null,
-        online: false,
-      });
+      // await knexUser.updateData(id, {
+      //   refreshToken: null,
+      //   online: false,
+      // });
+
+      console.log(id, "COOKIE");
+
+      // Assigning Refresh Token to the Database
+      const updateQueryById = `UPDATE users
+                         SET refresh_token = NULL
+                         WHERE id = '${id}'
+                        `;
+      await client.query(updateQueryById);
 
       return res.clearCookie("access").status(401).json({
         message: validCookie.message,
