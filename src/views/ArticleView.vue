@@ -10,10 +10,10 @@
         :subtitle="article.author + ' | ' + article.date"
         variant="tonal"
       >
-        <v-card-text>{{
+        <v-card-text class="article__text">{{
           article.article.intro.desc.slice(0, 100) + " ......"
         }}</v-card-text>
-        <v-card-actions>
+        <v-card-actions class="article__actions">
           <v-btn
             :to="{
               name: 'article_detail',
@@ -32,14 +32,11 @@
 <script>
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "article",
   setup() {
     const { state, dispatch } = useStore();
-    const router = useRoute();
-    // dispatch("generateToken", { routename: router.name });
     return {
       state,
     };
@@ -50,8 +47,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .article {
   // For the Navigation Thingy
-  margin: calc(var(--header-height) + 2rem) 0;
   @include flex($dir: column, $gap: 1rem);
+  margin: calc(var(--header-height) + 2rem) 0;
   // height: 30rem;
 
   &__heading {

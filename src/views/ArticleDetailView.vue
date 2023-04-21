@@ -54,13 +54,20 @@ export default {
 
 <style lang="scss" >
 .article-detail {
-  @include flex($dir: column);
+  @include flex($dir: column, $gap: 2rem);
   // For the Navigation Thingy
   margin: calc(var(--header-height) + 2rem) 0;
   padding: 0 1rem;
   &__heading {
-    @include font(2rem, $weight: 600, $clr: var(--secondary-color));
-    padding-bottom: 3rem;
+    @include font(2rem, $weight: 700, $clr: var(--secondary-color));
+    border-bottom: 1px solid;
+    padding: 0.75rem 1.75rem;
+  }
+
+  &__stats {
+    background-color: var(--primary-color-200);
+    border-radius: 0.5rem;
+    padding: 2rem;
   }
 
   &__intro,

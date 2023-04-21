@@ -2,7 +2,7 @@ $min-width-tablet: 45rem;
 $min-width-desktop: 60rem;
 
 @mixin reset() {
-  @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;900&family=Space+Grotesk:wght@700&display=swap");
 
   // Universal
   // --primary-color: hsl(43, 30%, 95%); //Universal
@@ -40,7 +40,7 @@ $min-width-desktop: 60rem;
     // --dark-color-400: #171717;
     // --dark-color-600: #101010;
 
-    // --accent-color: #fca400;
+    --accent-color: #fca400;
     // --primary-color: #04017d;
     --dark-color: #171717;
     // --dark-color: hsl(0, 0%, 9%);
@@ -98,6 +98,23 @@ $min-width-desktop: 60rem;
     //   font-size: 1.25rem;
     //   font-weight: 500;
     // }
+  }
+
+  @keyframes slide-design-horizontal {
+    from {
+      transform: translateX(-2rem);
+    }
+    to {
+      transform: translateX(2rem);
+    }
+  }
+  @keyframes slide-design-vertical {
+    from {
+      transform: translateY(-2rem);
+    }
+    to {
+      transform: translateY(2rem);
+    }
   }
 
   // button {

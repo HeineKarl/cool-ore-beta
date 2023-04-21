@@ -128,7 +128,7 @@
 <script>
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import HollowBtn from "@/components/HollowBtn.vue";
 import SolidBtn from "@/components/SolidBtn.vue";
@@ -140,17 +140,21 @@ export default defineComponent({
   },
   setup() {
     const { state, commit, dispatch } = useStore();
-    const router = useRoute();
+    const router = useRouter();
+    const route = useRoute();
 
     const userId = sessionStorage.getItem("id");
     commit("navigationList/handleAccountList", userId);
+
+    // if(route.fullPath)
+    // dispatch("generateToken");
 
     function updateProfile() {
       console.log("Update Profile");
 
       const userProfile = {
         id: state.user.id,
-        profile_image: state.profile.profile_image,
+        profile_image: state.user.profile_image || state.profile.profile_image,
         user_name: state.user.user_name,
         first_name: state.user.first_name,
         last_name: state.user.last_name,
@@ -162,9 +166,12 @@ export default defineComponent({
 
       commit("profile/updateProfile", userProfile);
 
-      setTimeout(() => {
-        dispatch("generateToken", { routename: router.name });
-      }, 1000);
+      function updateDelay() {
+        router.push({ name: "home" });
+        dispatch("generateToken");
+      }
+
+      setTimeout(updateDelay, 3 * state.duration);
     }
 
     function handleUpdateDialog() {

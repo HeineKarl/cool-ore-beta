@@ -9,6 +9,12 @@
           parameters to see betterment for Website users.
         </p>
       </div>
+      <div class="about__intro-design-left">
+        <img :src="require('@/assets/design/color_stripe_horizontal.png')" />
+      </div>
+      <div class="about__intro-design-right">
+        <img :src="require('@/assets/design/color_stripe.png')" />
+      </div>
     </section>
     <section class="about__trivia">
       <h3>Trivia</h3>
@@ -64,6 +70,13 @@
         <li>Tritan</li>
         <li>Achromat</li>
       </ul>
+
+      <div class="about__colorblind-design-left">
+        <img :src="require('@/assets/design/color_stripe_horizontal.png')" />
+      </div>
+      <div class="about__colorblind-design-right">
+        <img :src="require('@/assets/design/color_stripe_horizontal.png')" />
+      </div>
     </section>
 
     <section class="about__inspire">
@@ -81,15 +94,13 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "@vue/runtime-core";
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   setup() {
-    const { state, commit, dispatch } = useStore();
-    const router = useRoute();
-    // dispatch("generateToken", { routename: router.name });
+    const { state } = useStore();
+
     return {
       state,
     };
@@ -112,10 +123,28 @@ export default defineComponent({
   );
 
   &__intro {
-    // height: 25rem;
-    margin: 4rem 2rem 0;
-
     @include flex($dir: column, $gap: 1rem);
+    @include position(relative);
+    z-index: 5;
+    margin: 4rem 2rem 0;
+    // height: 25rem;
+
+    &-design-left,
+    &-design-right {
+      z-index: 1;
+      width: clamp(5rem, 40vw, 15rem);
+      opacity: 0.15;
+    }
+
+    &-design-left {
+      @include position(absolute, $bl: true, $x: -1rem, $y: -1rem);
+      animation: slide-design-vertical 5s linear 2s infinite alternate;
+    }
+
+    &-design-right {
+      @include position(absolute, $tr: true, $x: -15rem, $y: -1rem);
+      animation: slide-design-horizontal 5s linear 2s infinite alternate-reverse;
+    }
   }
 
   &__content {
@@ -146,15 +175,18 @@ export default defineComponent({
   }
 
   &__trivia {
+    @include flex($dir: column, $align: flex-start, $gap: 1rem);
     margin: 2rem 2rem 0;
     max-width: 60rem;
+    background-color: var(--accent-color);
+    padding: 2rem;
+    border-radius: 0.5rem;
 
-    @include flex($dir: column, $align: flex-start, $gap: 1rem);
     h3 {
       @include font(
-        clamp(1.25rem, 6vw, 1.75rem),
+        clamp(1.5rem, 6vw, 2.25rem),
         $weight: 800,
-        $clr: var(--secondary-color)
+        $clr: var(--primary-color)
       );
     }
 
@@ -162,27 +194,29 @@ export default defineComponent({
       @include font(
         clamp(0.95rem, 1.5vw, 1rem),
         $weight: 400,
-        $clr: var(--secondary-color)
+        $clr: var(--primary-color)
       );
       line-height: 1.5;
     }
   }
 
   &__colorblind {
-    @include flex($dir: column, $align: flex-start, $gap: 1rem);
+    @include flex($dir: column, $align: flex-start, $gap: 2rem);
+    @include position(relative);
+    z-index: 5;
     margin: 2rem 2rem 0;
     max-width: 60rem;
 
     h3 {
       @include font(
-        clamp(1.25rem, 6vw, 1.75rem),
+        clamp(1.5rem, 6vw, 2.25rem),
         $weight: 800,
         $clr: var(--secondary-color)
       );
     }
     h4 {
       @include font(
-        clamp(0.75rem, 6vw, 1rem),
+        clamp(1rem, 6vw, 1.5rem),
         $weight: 800,
         $clr: var(--secondary-color)
       );
@@ -199,19 +233,42 @@ export default defineComponent({
     ul {
       margin-left: 1rem;
     }
+
+    &-design-left,
+    &-design-right {
+      z-index: 1;
+      width: clamp(5rem, 40vw, 15rem);
+      opacity: 0.15;
+    }
+
+    &-design-left {
+      @include position(absolute, $bl: true, $x: -6rem, $y: -1rem);
+      animation: slide-design-horizontal 5s linear 2s infinite alternate;
+    }
+
+    &-design-right {
+      @include position(absolute, $tr: true, $x: -5rem, $y: -1rem);
+      animation: slide-design-horizontal 5s linear 2s infinite alternate-reverse;
+    }
   }
 
   &__inspire {
-    @include flex($dir: column, $align: flex-start, $gap: 1rem);
-    margin: 2rem 2rem 0;
+    // @include flex($dir: column, $align: flex-start, $gap: 1rem);
+
+    @include flex($dir: column, $gap: 1rem);
+    background-color: var(--primary-color-200);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin: 2rem 1rem 0;
     max-width: 60rem;
 
     h3 {
       @include font(
-        clamp(1.25rem, 6vw, 1.75rem),
+        clamp(1.5rem, 6vw, 2.25rem),
         $weight: 800,
         $clr: var(--secondary-color)
       );
+      text-align: center;
     }
     p {
       @include font(
@@ -219,73 +276,10 @@ export default defineComponent({
         $weight: 400,
         $clr: var(--secondary-color)
       );
+      text-align: center;
       line-height: 1.5;
     }
   }
-
-  // &__banner {
-  //   @include flex();
-  //   @include font(
-  //     clamp(1.5rem, 5vw, 3rem),
-  //     $weight: 400,
-  //     $clr: var(--primary-color)
-  //   );
-  //   background-color: var(--secondary-color);
-  //   margin: 0;
-  //   width: 100%;
-  //   height: 10rem;
-  //   text-align: center;
-  // }
-
-  // &__types {
-  //   @include flex($align: flex-start, $dir: column, $gap: 4rem);
-  //   margin: 1rem 2rem 2rem;
-  //   max-width: 45rem;
-  // }
-
-  // &__color-types {
-  //   @include flex($align: flex-start, $dir: column, $gap: 1rem);
-
-  //   h3 {
-  //     @include font(
-  //       clamp(1.15rem, 6vw, 1.5rem),
-  //       $weight: 800,
-  //       $clr: var(--secondary-color)
-  //     );
-  //   }
-
-  //   p {
-  //     @include font(
-  //       clamp(0.95rem, 1.5vw, 1rem),
-  //       $weight: 400,
-  //       $clr: var(--secondary-color)
-  //     );
-  //     line-height: 1.5;
-  //   }
-  // }
-
-  // &__subtypes {
-  //   @include flex($dir: column, $gap: 1rem);
-  //   list-style-type: circle;
-  //   margin-left: 1rem;
-
-  //   h3 {
-  //     @include font(
-  //       clamp(1rem, 6vw, 1.15rem),
-  //       $weight: 800,
-  //       $clr: var(--secondary-color)
-  //     );
-  //   }
-
-  //   p {
-  //     @include font(
-  //       clamp(0.95rem, 1.5vw, 1rem),
-  //       $weight: 400,
-  //       $clr: var(--secondary-color)
-  //     );
-  //     line-height: 1.5;
-  //   }
-  // }
 }
 
 @media (min-width: $min-width-desktop) {
@@ -296,6 +290,9 @@ export default defineComponent({
     &__colorblind,
     &__inspire {
       margin-inline: 4rem;
+    }
+    &__inspire {
+      padding: 2rem;
     }
   }
 }

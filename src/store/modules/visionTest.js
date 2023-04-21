@@ -1,3 +1,6 @@
+import UserService from "@/utils/UserService";
+
+const { updateUserVision } = UserService;
 export const visionTest = {
   namespaced: true,
   state: {
@@ -10,6 +13,7 @@ export const visionTest = {
     deutan: [],
     imageIndex: 0,
     end: false,
+    vision_type: null,
     result: {
       vision: null,
       desc: null,
@@ -185,6 +189,7 @@ export const visionTest = {
         state.result.vision = "Normal Vision";
         state.result.desc =
           "All three types of cone cells, which are functioning normally, are used for normal color vision. Trichromacy is another name for normal color vision. Trichromats are people with normal color vision.";
+        state.vision_type = "Normal Vision";
         state.end = true;
       }
 
@@ -231,6 +236,7 @@ export const visionTest = {
           ) {
             console.log("Protan");
             state.result.vision = "Protan";
+            state.vision_type = state.result.vision;
             state.result.desc =
               "Protan is a red-green color blindness that accounts for 20% of all cases of color blindness. Protan color blindness limits a person's ability to discern between more than three colors to two or three, as opposed to seven colors for someone with normal color vision.";
           } else if (
@@ -238,6 +244,7 @@ export const visionTest = {
             state.deutan.length > state.protan.length
           ) {
             state.result.vision = "Deutan";
+            state.vision_type = state.result.vision;
             state.result.desc =
               "Approximately 80% of all cases of color blindness are deutan, a red-green color blindness. In contrast to someone with normal color vision, who can differentiate 7 different color hues, a person with deutan color blindness can only see 2 or 3 different color hues.";
           } else {
@@ -272,5 +279,13 @@ export const visionTest = {
       console.log(state.correctAnswers.length);
     },
   },
-  actions: {},
+  actions: {
+    updateUserVision({ state }) {
+      if (!state.vision_type) return;
+      updateUserVision({
+        id: parseInt(sessionStorage.getItem("id")),
+        vision_type: state.vision_type,
+      });
+    },
+  },
 };

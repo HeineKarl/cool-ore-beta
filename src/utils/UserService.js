@@ -96,6 +96,19 @@ class UserService {
     });
   }
 
+  static updateUserVision(userVision) {
+    const { id, vision_type } = userVision;
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.put(url + "vision-result", { id, vision_type });
+        resolve(res);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   // Update the Audio or Text To Speech
   static updateUserAudio(userAudio) {
     const { user_id, audio_accent, audio_pitch, audio_speed, audio_volume } =

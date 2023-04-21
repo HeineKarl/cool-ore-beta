@@ -86,10 +86,14 @@ import HollowBtn from "@/components/HollowBtn.vue";
 export default {
   components: { SolidBtn, HollowBtn },
   setup() {
-    const { state, commit } = useStore();
+    const { state, commit, dispatch } = useStore();
 
     function visionEval() {
       commit("visionTest/nextIshihara");
+      if (!!state.visionTest.result.vision) {
+        dispatch("visionTest/updateUserVision");
+      }
+      console.log(!!state.visionTest.result.vision);
     }
 
     function visionNothing() {
@@ -108,7 +112,7 @@ export default {
 <style lang="scss">
 .vision-test {
   // For the Navigation Thingy
-  margin: var(--header-height) 0 0;
+  margin: calc(var(--header-height)) 0 0;
   height: var(--main-height);
 
   @include flex();
@@ -116,6 +120,7 @@ export default {
 
   &__card {
     @include flex($dir: column, $justify: space-between, $gap: 2rem);
+    margin-bottom: 4rem;
   }
 
   &__info {

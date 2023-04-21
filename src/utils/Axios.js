@@ -38,6 +38,8 @@ axios.interceptors.response.use(
     const duration =
       response.config.metadata.endTime - response.config.metadata.startTime;
 
+    console.log("Duration", duration);
+
     store.commit("setDuration", duration);
 
     let progress = 0;
@@ -61,7 +63,7 @@ axios.interceptors.response.use(
     // Set Template Show
     setTimeout(() => {
       store.commit("setTemplateValidation", true);
-    }, duration);
+    }, 3 * duration);
 
     // Get User Data
     const user = response.data.user;
@@ -70,6 +72,7 @@ axios.interceptors.response.use(
     store.commit("colors/setColor", user.color_theme);
 
     // Set Audio Value
+    console.log(user);
     store.commit("textToSpeech/setAudio", {
       accent: user.audio_accent,
       pitch: user.audio_pitch,

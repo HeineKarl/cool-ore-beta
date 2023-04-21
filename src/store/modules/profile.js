@@ -20,5 +20,4 @@ export const profile = {
       state.profile_image = profile_image;
     },
   },
-  actions: {},
 };

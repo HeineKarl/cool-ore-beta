@@ -112,10 +112,6 @@ const store = createStore({
         profile_image = new TextDecoder().decode(bytesView);
         state.user.profile_image = profile_image;
       }
-
-      // setTimeout(async () => {
-      //   state.templateValidation = await response.data.ok;
-      // }, 100);
     },
 
     async logoutUser({ state }) {
@@ -200,7 +196,7 @@ const store = createStore({
         state.user.profile_image = profile_image;
       }
 
-      sessionStorage.setItem("id", data.user.user_id);
+      sessionStorage.setItem("id", data.user.id);
 
       setTimeout(async () => {
         await router.push({ name: "profile" });

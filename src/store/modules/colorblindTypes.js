@@ -100,6 +100,26 @@ export const colorblind = {
         ],
       },
     },
+    testimonials: [
+      {
+        heading: "A Great Website!",
+        testimonial:
+          "I did participate with the research Cool-ore and it is really something that helps me to be aware and colorwise it is beautiful.",
+        credential: "Anonymous",
+      },
+      {
+        heading: "Navigation is great!",
+        testimonial:
+          "I can gradually take notice different parts of the website. It is a much better user experience for me.",
+        credential: "Tope",
+      },
+      {
+        heading: "Inspiring",
+        testimonial:
+          "I didn't know that I am green weak. Now, I know why it is really hard to browse for websites. This is a great way to share awareness. Keep it up.",
+        credential: "Anonymous",
+      },
+    ],
   },
   mutations: {},
   actions: {},

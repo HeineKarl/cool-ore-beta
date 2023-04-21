@@ -66,12 +66,13 @@ export const textToSpeech = {
       // Prevent Spamming
       if (state.isListening) return;
 
-      let say, btn, img, anchor, linkPath;
+      let say, btn, span, img, anchor, linkPath;
 
       if (!event) {
         say = state.message;
       } else {
         btn = event.target.closest("button");
+        span = event.target.closest("span");
         img = event.target.closest("img");
         anchor = event.target.closest("a");
         linkPath = anchor?.attributes["href"].nodeValue;
@@ -96,8 +97,13 @@ export const textToSpeech = {
             break;
 
           default:
-            if (btn) {
+            console.log(event);
+            if (!!btn) {
               say = `This is ${event.target.textContent} button`;
+            } else if (!!span) {
+              say = `This is ${span.textContent} button`;
+            } else if (!!anchor) {
+              say = `This is ${anchor.textContent} button`;
             } else if (event.which === 3) {
               say = `${event.target.textContent}`;
             } else {
@@ -131,6 +137,8 @@ export const textToSpeech = {
     },
 
     setAudio(state, { accent, pitch, speed, volume }) {
+      console.log(accent, pitch, speed, volume);
+      console.log("Set Audio");
       state.accent = accent;
       state.pitch = pitch;
       state.rate = speed;
