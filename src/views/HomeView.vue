@@ -27,7 +27,7 @@
       <v-card class="home__video-card">
         <div class="home__video-container">
           <iframe
-            :src="require('@/assets/video/color_design.mp4')"
+            src="https://youtube.com/embed/xtwsqPjKkLo"
             allowfullscreen
             allow="0"
           ></iframe>
