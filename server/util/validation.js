@@ -43,18 +43,9 @@ async function validation(req, res, next) {
       process.env.ACCESS_TOKEN_SECRET
     );
 
-    console.log(validCookie, "VALID COOKIE");
-
     if (validCookie.expired) {
       console.log(`Expired: ${validCookie.expired}`.red);
       const { id } = parseJwt(destructedJWT);
-
-      // await knexUser.updateData(id, {
-      //   refreshToken: null,
-      //   online: false,
-      // });
-
-      console.log(id, "COOKIE");
 
       // Assigning Refresh Token to the Database
       const updateQueryById = `UPDATE users

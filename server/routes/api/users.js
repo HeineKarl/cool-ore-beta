@@ -452,6 +452,27 @@ router.put("/profile", async (req, res) => {
   }
 });
 
+router.put("/vision-result", async (req, res) => {
+  console.log("User Vision Update".underline.green);
+
+  try {
+    // Getting the data from the req body
+    const { id, vision_type } = req.body;
+
+    // Update the Data in the Database
+    const updateQueryById = `UPDATE users 
+                             SET vision_type = ${insertion(vision_type)}
+                             WHERE id = ${id}
+                            `;
+
+    await client.query(updateQueryById);
+
+    res.status(200).json({ message: "Vision Type Successfully Updated" });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // Updating the Audio
 router.put("/audio/:id", async (req, res) => {
   console.log("User Audio Update".underline.green);
