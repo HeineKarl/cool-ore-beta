@@ -1,13 +1,17 @@
 <template>
   <div class="vision-test">
     <div v-if="!state.visionTest.end" class="vision-test__card">
-      <div class="vision-test__ishihara">
-        <img
-          :src="
-            state.visionTest.ishihara_red_green[state.visionTest.imageIndex].img
-          "
-          alt=""
-        />
+      <div class="vision-test__frame">
+        <span>{{ state.visionTest.imageIndex + 1 }} / 25</span>
+        <div class="vision-test__ishihara">
+          <img
+            :src="
+              state.visionTest.ishihara_red_green[state.visionTest.imageIndex]
+                .img
+            "
+            alt=""
+          />
+        </div>
       </div>
 
       <form class="vision-test__form">
@@ -123,6 +127,10 @@ export default {
     margin-bottom: 4rem;
   }
 
+  &__frame {
+    @include flex($dir: column, $justify: space-between);
+  }
+
   &__info {
     background-color: var(--primary-color-200);
     margin: auto;
@@ -137,7 +145,7 @@ export default {
 
   &__ishihara {
     margin: 1.5rem 0;
-    width: clamp(12rem, 50vw, 18rem);
+    width: clamp(12rem, 30vw, 18rem);
   }
 
   &__form {

@@ -26,6 +26,53 @@ export const textToSpeech = {
   },
   getters: {},
   mutations: {
+    setSynthesis(state, duration) {
+      let voices, accents, accent, pitch, rate, volume, defaultVoice;
+      voices = window.speechSynthesis.getVoices();
+      // window.addEventListener("load", () => {
+      setTimeout(() => {
+        console.log("some");
+        voices = window.speechSynthesis.getVoices();
+        accents = voices.map((voice) => voice.name);
+        accent =
+          state.accent || voices.find((voice) => voice.default == true).name;
+        pitch = state.pitch || 1;
+        rate = state.rate || 1;
+        volume = state.volume || 1;
+        defaultVoice = accents.findIndex((elaccent) => elaccent === accent);
+        // console.log(accent, state.textToSpeech.accent);
+        // console.log(voices.find((voice) => voice.default == true).name);
+
+        state.accents = accents;
+        state.accent = accent;
+        state.voices = voices;
+        state.pitch = pitch;
+        state.rate = rate;
+        state.volume = volume;
+        state.defaultVoice = defaultVoice;
+        // commit("textToSpeech/setValue", {
+        //   voices,
+        //   accents,
+        //   accent,
+        //   pitch,
+        //   rate,
+        //   volume,
+        //   defaultVoice,
+        // });
+
+        // this.setValue(state, {
+        //   voices,
+        //   accents,
+        //   accent,
+        //   pitch,
+        //   rate,
+        //   volume,
+        //   defaultVoice,
+        // });
+      }, duration * 1.5);
+      // });
+    },
+
     setValue(
       state,
       { accents, accent, voices, pitch, rate, volume, defaultVoice }

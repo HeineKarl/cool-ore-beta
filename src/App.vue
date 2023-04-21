@@ -163,13 +163,10 @@ export default defineComponent({
   components: { Logo, CloseBtn, NavigationList },
   watch: {
     $route(to, from) {
-      console.log(to, from);
-
       if (to.name == "profile" || to.name == "audio") {
         this.$store.dispatch("generateToken");
       }
 
-      console.log(this.$store);
       // Get the voices of the Audio Synthesis
       // let setVoices,
       //   setAccents,
@@ -221,39 +218,38 @@ export default defineComponent({
     // dispatch("generateToken");
 
     // Get the voices of the Audio Synthesis
-    function setSynthesis() {
-      let voices, accents, accent, pitch, rate, volume, defaultVoice;
-      voices = window.speechSynthesis.getVoices();
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          console.log("some");
-          voices = window.speechSynthesis.getVoices();
-          accents = voices.map((voice) => voice.name);
-          accent =
-            state.textToSpeech.accent ||
-            voices.find((voice) => voice.default == true).name;
-          pitch = state.textToSpeech.pitch || 1;
-          rate = state.textToSpeech.rate || 1;
-          volume = state.textToSpeech.volume || 1;
-          defaultVoice = accents.findIndex((elaccent) => elaccent === accent);
-          // console.log(accent, state.textToSpeech.accent);
-          // console.log(voices.find((voice) => voice.default == true).name);
+    // function setSynthesis() {
+    //   let voices, accents, accent, pitch, rate, volume, defaultVoice;
+    //   voices = window.speechSynthesis.getVoices();
+    //   window.addEventListener("load", () => {
+    //     setTimeout(() => {
+    //       console.log("some");
+    //       voices = window.speechSynthesis.getVoices();
+    //       accents = voices.map((voice) => voice.name);
+    //       accent =
+    //         state.textToSpeech.accent ||
+    //         voices.find((voice) => voice.default == true).name;
+    //       pitch = state.textToSpeech.pitch || 1;
+    //       rate = state.textToSpeech.rate || 1;
+    //       volume = state.textToSpeech.volume || 1;
+    //       defaultVoice = accents.findIndex((elaccent) => elaccent === accent);
+    //       // console.log(accent, state.textToSpeech.accent);
+    //       // console.log(voices.find((voice) => voice.default == true).name);
 
-          commit("textToSpeech/setValue", {
-            voices,
-            accents,
-            accent,
-            pitch,
-            rate,
-            volume,
-            defaultVoice,
-          });
-        }, state.duration + 1000);
-      });
-    }
+    //       commit("textToSpeech/setValue", {
+    //         voices,
+    //         accents,
+    //         accent,
+    //         pitch,
+    //         rate,
+    //         volume,
+    //         defaultVoice,
+    //       });
+    //     }, 1000);
+    //   });
+    // }
 
-    setSynthesis();
-    setTimeout(() => {}, state.duration * 100);
+    // setSynthesis();
 
     // If user is not log in
     if (!sessionStorage.getItem("id")) commit("setTemplateValidation");

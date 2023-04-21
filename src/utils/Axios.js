@@ -4,9 +4,9 @@ import router from "@/router";
 
 let axios = Axios.create({
   // baseURL: "http://localhost:8080",
-  // baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5000",
   // baseURL: "https://cool-ore-beta.onrender.com/",
-  baseURL: "https://cool-ore-beta-abhx.onrender.com/",
+  // baseURL: "https://cool-ore-beta-abhx.onrender.com/",
   withCredentials: true,
 });
 
@@ -79,6 +79,8 @@ axios.interceptors.response.use(
       speed: user.audio_speed,
       volume: user.audio_volume,
     });
+
+    store.commit("textToSpeech/setSynthesis", duration);
 
     return response;
   },
