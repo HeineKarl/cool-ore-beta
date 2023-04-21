@@ -248,7 +248,7 @@ export default defineComponent({
             volume,
             defaultVoice,
           });
-        }, 1200);
+        }, state.duration + 1000);
       });
     }
 
