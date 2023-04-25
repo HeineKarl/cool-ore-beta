@@ -34,9 +34,9 @@ import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default defineComponent({
-  name: "article",
+  name: "articles",
   setup() {
-    const { state, dispatch } = useStore();
+    const { state } = useStore();
     return {
       state,
     };

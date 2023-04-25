@@ -94,10 +94,10 @@ export default {
 
     function visionEval() {
       commit("visionTest/nextIshihara");
+      console.log(!!state.visionTest.result.vision);
       if (!!state.visionTest.result.vision) {
         dispatch("visionTest/updateUserVision");
       }
-      console.log(!!state.visionTest.result.vision);
     }
 
     function visionNothing() {
@@ -158,7 +158,6 @@ export default {
   &__btn {
     @include flex($gap: 1rem);
     width: clamp(7rem, 20vw, 12rem);
-    // width: auto;
   }
 
   &__answer {
@@ -177,16 +176,12 @@ export default {
   @media (min-width: $min-width-tablet) {
     .vision-test {
       @include flex();
-      //   width: 100%;
       &__card {
         padding-top: 5rem;
         @include flex($dir: row, $gap: 3rem);
-        //   width: 50rem;
       }
 
       &__form {
-        // @include flex($dir: column);
-        // max-width: 20rem;
         padding: 0 1rem;
         width: clamp(15rem, 40vw, 25rem);
       }

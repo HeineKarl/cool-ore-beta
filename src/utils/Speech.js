@@ -21,7 +21,8 @@ class Speech {
   }
 
   start() {
-    console.log("START");
+    // console.log("START");
+
     // Listening
     this.isListening = !this.isListening;
 

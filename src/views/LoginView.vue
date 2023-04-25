@@ -27,11 +27,13 @@
         <div class="auth__field">
           <v-text-field
             clearable
+            :append-icon="state.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="state.showPassword ? 'text' : 'password'"
+            @click:append="showPassword"
             variant="outlined"
             label="Password"
             v-model="$store.state.password"
             id="password"
-            type="password"
           ></v-text-field>
         </div>
         <div class="auth__field">
@@ -60,9 +62,15 @@ export default defineComponent({
     function verifyUser() {
       dispatch("verifyUser");
     }
+
+    function showPassword() {
+      commit("showPassword");
+    }
+
     return {
       state,
       verifyUser,
+      showPassword,
     };
   },
 });
@@ -77,8 +85,21 @@ export default defineComponent({
 .auth {
   // For the Navigation Thingy
   margin: var(--header-height) 0 0;
-  input {
-    background-color: var(--primary-color);
+
+  &__field {
+    input {
+      @include font(1rem, $weight: 300, $clr: var(--secondary-color));
+    }
+  }
+
+  &__field input[type="password"] {
+    @include font(1.5rem, $weight: 300, $clr: var(--secondary-color));
+  }
+
+  &__reroute {
+    a {
+      @include font(0.85rem, $weight: 500, $clr: var(--success-color));
+    }
   }
 }
 </style>

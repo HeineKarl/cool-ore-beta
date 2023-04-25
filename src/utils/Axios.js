@@ -3,9 +3,7 @@ import store from "@/store/index";
 import router from "@/router";
 
 let axios = Axios.create({
-  // baseURL: "http://localhost:8080",
-  // baseURL: "http://localhost:5000",
-  // baseURL: "https://cool-ore-beta.onrender.com/",
+  baseURL: "http://localhost:5000",
   baseURL: "https://cool-ore-beta-abhx.onrender.com/",
   withCredentials: true,
 });
@@ -14,7 +12,7 @@ axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(
   (request) => {
-    console.log("REQUEST INTERCEPTOR");
+    // console.log("REQUEST INTERCEPTOR");
 
     // Set Start Time of Request
     request.metadata = { startTime: new Date() };
@@ -28,8 +26,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
-    console.log("RESPONSE INTERCEPTOR");
-    console.log(response);
+    // console.log("RESPONSE INTERCEPTOR");
 
     // Set End Time of Response
     response.config.metadata.endTime = new Date();
@@ -37,8 +34,6 @@ axios.interceptors.response.use(
     // Calculate Duration of Response and Request
     const duration =
       response.config.metadata.endTime - response.config.metadata.startTime;
-
-    console.log("Duration", duration);
 
     store.commit("setDuration", duration);
 
@@ -72,7 +67,6 @@ axios.interceptors.response.use(
     store.commit("colors/setColor", user.color_theme);
 
     // Set Audio Value
-    console.log(user);
     store.commit("textToSpeech/setAudio", {
       accent: user.audio_accent,
       pitch: user.audio_pitch,

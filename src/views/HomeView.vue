@@ -37,10 +37,10 @@
           <v-card-title class="ma-0 pa-0" style="font-size: 1rem"
             >Color Design</v-card-title
           >
-          <v-spacer></v-spacer>
-          <v-btn icon elevation="0">
+          <!-- <v-spacer></v-spacer> -->
+          <!-- <v-btn icon elevation="0">
             <v-icon>mdi-information</v-icon>
-          </v-btn>
+          </v-btn> -->
         </div>
       </v-card>
 
@@ -273,7 +273,7 @@ export default defineComponent({
     &-content {
       @include flex($justify: space-between);
       width: 100%;
-      padding: 0 2rem;
+      padding: 0.5rem 2rem;
     }
 
     &-design-left,

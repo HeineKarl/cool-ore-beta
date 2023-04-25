@@ -8,7 +8,6 @@ import { visionTest } from "./modules/visionTest";
 import { article } from "./modules/article";
 
 import router from "@/router";
-import axios from "axios";
 
 import UserService from "@/utils/UserService";
 const { getUser, insertUser, logoutUser, verifyUser, generateToken } =
@@ -18,6 +17,7 @@ const store = createStore({
   state: {
     templateValidation: false,
     validateUsingLogin: false,
+    showPassword: false,
     duration: 0,
     test: null,
     accessToken: "",
@@ -36,6 +36,9 @@ const store = createStore({
     progressShow: false,
   },
   mutations: {
+    showPassword(state) {
+      state.showPassword = !state.showPassword;
+    },
     setDuration(state, duration) {
       state.duration = duration;
     },
@@ -59,20 +62,21 @@ const store = createStore({
       if (progress == 100) {
         setTimeout(() => {
           state.progressShow = false;
-          console.log(progress);
         }, 500);
       }
     },
   },
   actions: {
     async generateToken({ state }) {
-      const userId = sessionStorage.getItem("id");
-      if (!userId) {
-        state.isGuest = true;
-        return;
-      } else {
-        state.isGuest = false;
-      }
+      // const userId = sessionStorage.getItem("id");
+      // if (!userId) {
+      //   state.isGuest = true;
+      //   return;
+      // } else {
+      //   state.isGuest = false;
+      // }
+      state.templateValidation = false;
+      state.isGuest = true;
 
       const response = await generateToken();
 
@@ -86,7 +90,6 @@ const store = createStore({
         state.message = response.data.message;
 
         setTimeout(async () => {
-          console.log(state.message);
           await router.push("/notfound");
           sessionStorage.clear();
         }, 500);
@@ -112,6 +115,11 @@ const store = createStore({
         profile_image = new TextDecoder().decode(bytesView);
         state.user.profile_image = profile_image;
       }
+
+      setTimeout(async () => {
+        state.templateValidation = true;
+        state.isGuest = false;
+      }, state.duration + 1000);
     },
 
     async logoutUser({ state }) {

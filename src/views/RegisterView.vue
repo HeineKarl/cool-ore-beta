@@ -37,12 +37,14 @@
         </div>
         <div class="auth__field">
           <v-text-field
+            :append-icon="state.showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="state.showPassword ? 'text' : 'password'"
+            @click:append="showPassword"
             clearable
             variant="outlined"
             label="Password"
             v-model="state.password"
             id="password"
-            type="password"
           ></v-text-field>
         </div>
         <div class="auth__field">
@@ -71,7 +73,11 @@ export default defineComponent({
       dispatch("insertUser");
     }
 
-    return { state, insertUser };
+    function showPassword() {
+      commit("showPassword");
+    }
+
+    return { state, insertUser, showPassword };
   },
 });
 </script>

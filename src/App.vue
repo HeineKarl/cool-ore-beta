@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <!-- <v-progress-linear
+      v-if="state.progressShow"
+      class="header__progress"
+      :model-value="state.progressVal"
+    ></v-progress-linear> -->
     <v-main>
       <header class="header app-bar">
         <div class="header__inner">
@@ -7,7 +12,7 @@
           <h1 class="header__logo-name">Cool-ore</h1>
           <v-spacer></v-spacer>
 
-          <div class="header__collection">
+          <div v-if="state.templateValidation" class="header__collection">
             <v-btn
               @mouseover="textToSpeech"
               v-if="!state.user"
@@ -27,13 +32,13 @@
             >
               Vision Test
             </v-btn>
-
-            <v-app-bar-nav-icon
-              @click="navigation"
-              class="header__burger"
-              elevation="0"
-            ></v-app-bar-nav-icon>
           </div>
+
+          <v-app-bar-nav-icon
+            @click="navigation"
+            class="header__burger"
+            elevation="0"
+          ></v-app-bar-nav-icon>
         </div>
         <v-progress-linear
           v-if="state.progressShow"
@@ -163,41 +168,14 @@ export default defineComponent({
   components: { Logo, CloseBtn, NavigationList },
   watch: {
     $route(to, from) {
-      if (to.name == "profile" || to.name == "audio") {
+      if (
+        to.name == "profile" ||
+        to.name == "audio" ||
+        to.name == "vision-test" ||
+        to.name == "appearance"
+      ) {
         this.$store.dispatch("generateToken");
       }
-
-      // Get the voices of the Audio Synthesis
-      // let setVoices,
-      //   setAccents,
-      //   setAccent,
-      //   setPitch,
-      //   setRate,
-      //   setVolume,
-      //   setDefaultVoice;
-      // setVoices = window.speechSynthesis.getVoices();
-
-      // window.addEventListener("load", () => {
-      //   setVoices = window.speechSynthesis.getVoices();
-      //   setAccents = voices.map((voice) => voice.name);
-      //   setAccent =
-      //     this.$store.state.textToSpeech.accent || voices.find((voice) => voice.default == true);
-      //   setPitch = this.$store.state.textToSpeech.pitch || 1;
-      //   setRate = this.$store.state.textToSpeech.rate || 1;
-      //   setVolume = this.$store.state.textToSpeech.volume || 1;
-      //   setDefaultVoice = setAccents.findIndex(
-      //     (elaccent) => elaccent === setAccent
-      //   );
-      //   this.$store.commit("textToSpeech/setValue", {
-      //     voices: setVoices,
-      //     accents: setAccents,
-      //     accent: setAccent.name,
-      //     pitch: setPitch,
-      //     rate: setRate,
-      //     volume: setVolume,
-      //     defaultVoice: setDefaultVoice,
-      //   });
-      // });
     },
   },
   setup() {
@@ -215,41 +193,9 @@ export default defineComponent({
     const { state, commit, dispatch } = useStore();
     const isNavOpen = ref(false);
 
-    // dispatch("generateToken");
-
-    // Get the voices of the Audio Synthesis
-    // function setSynthesis() {
-    //   let voices, accents, accent, pitch, rate, volume, defaultVoice;
-    //   voices = window.speechSynthesis.getVoices();
-    //   window.addEventListener("load", () => {
-    //     setTimeout(() => {
-    //       console.log("some");
-    //       voices = window.speechSynthesis.getVoices();
-    //       accents = voices.map((voice) => voice.name);
-    //       accent =
-    //         state.textToSpeech.accent ||
-    //         voices.find((voice) => voice.default == true).name;
-    //       pitch = state.textToSpeech.pitch || 1;
-    //       rate = state.textToSpeech.rate || 1;
-    //       volume = state.textToSpeech.volume || 1;
-    //       defaultVoice = accents.findIndex((elaccent) => elaccent === accent);
-    //       // console.log(accent, state.textToSpeech.accent);
-    //       // console.log(voices.find((voice) => voice.default == true).name);
-
-    //       commit("textToSpeech/setValue", {
-    //         voices,
-    //         accents,
-    //         accent,
-    //         pitch,
-    //         rate,
-    //         volume,
-    //         defaultVoice,
-    //       });
-    //     }, 1000);
-    //   });
-    // }
-
-    // setSynthesis();
+    window.addEventListener("load", () => {
+      dispatch("generateToken");
+    });
 
     // If user is not log in
     if (!sessionStorage.getItem("id")) commit("setTemplateValidation");
@@ -451,6 +397,9 @@ footer {
     &__logo-name,
     &__vision {
       @include flex();
+    }
+    &__burger {
+      margin-left: 1rem;
     }
   }
 }

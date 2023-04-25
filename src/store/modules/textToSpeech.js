@@ -31,7 +31,6 @@ export const textToSpeech = {
       voices = window.speechSynthesis.getVoices();
       // window.addEventListener("load", () => {
       setTimeout(() => {
-        console.log("some");
         voices = window.speechSynthesis.getVoices();
         accents = voices.map((voice) => voice.name);
         accent =
@@ -144,7 +143,6 @@ export const textToSpeech = {
             break;
 
           default:
-            console.log(event);
             if (!!btn) {
               say = `This is ${event.target.textContent} button`;
             } else if (!!span) {
@@ -184,8 +182,6 @@ export const textToSpeech = {
     },
 
     setAudio(state, { accent, pitch, speed, volume }) {
-      console.log(accent, pitch, speed, volume);
-      console.log("Set Audio");
       state.accent = accent;
       state.pitch = pitch;
       state.rate = speed;

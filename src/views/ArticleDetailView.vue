@@ -41,12 +41,11 @@ export default {
   setup() {
     const { params } = useRoute();
     const { state } = useStore();
-    console.log(parseInt(params.id));
+
     let article = state.article.articles.find(
       (sarticle) => sarticle.id == parseInt(params.id)
     );
-    console.log(article);
-    console.log(article.article.title);
+
     return { article };
   },
 };

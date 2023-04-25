@@ -260,7 +260,6 @@ export const colors = {
   },
   mutations: {
     setColor(state, colorName) {
-      console.log(!colorName);
       if (!colorName) {
         colorName = "light_mode";
       }
