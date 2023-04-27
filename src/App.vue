@@ -174,7 +174,7 @@ export default defineComponent({
       //   this.$store.state.isGuest && sessionStorage.getItem("id") == null
       // );
 
-      if (this.$store.state.isGuest && sessionStorage.getItem("id") == null) {
+      if (sessionStorage.getItem("id") == null) {
         return this.$store.commit(
           "textToSpeech/setSynthesis",
           this.$store.state.duration || 1000
@@ -215,7 +215,7 @@ export default defineComponent({
 
     window.addEventListener("load", () => {
       // If the user is a guest, then don't generate token
-      if (state.isGuest && sessionStorage.length == 0) return;
+      if (sessionStorage.length == 0) return;
       dispatch("generateToken");
     });
 
