@@ -2,7 +2,7 @@
   <div class="auth maintenance">
     <form class="auth__form" @submit.prevent="changeUserPassword">
       <div class="auth__heading">New Password</div>
-      <span class="auth__reroute">
+      <span v-if="state.user == true" class="auth__reroute">
         Have an account?
         <router-link :to="{ name: 'login' }">Login Now</router-link>
       </span>
@@ -54,7 +54,6 @@ export default {
     const { state, commit, dispatch } = useStore();
     const router = useRouter();
 
-    console.log(!state.user);
     if (!state.fix && !state.user) router.push({ name: "home" });
 
     function showPassword() {

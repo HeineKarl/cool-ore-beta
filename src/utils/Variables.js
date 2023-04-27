@@ -1,6 +1,6 @@
 const reqUrl = {
-  // users: "http://localhost:5000/api/users/",
-  users: "api/users/",
+  users: "http://localhost:5000/api/users/",
+  // users: "api/users/",
 };
 
 // const reqUrl = {

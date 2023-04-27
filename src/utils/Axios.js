@@ -3,8 +3,8 @@ import store from "@/store/index";
 import router from "@/router";
 
 let axios = Axios.create({
-  // baseURL: "http://localhost:5000",
-  baseURL: "https://cool-ore-beta-abhx.onrender.com/",
+  baseURL: "http://localhost:5000",
+  // baseURL: "https://cool-ore-beta-abhx.onrender.com/",
   withCredentials: true,
 });
 

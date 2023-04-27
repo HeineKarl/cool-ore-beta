@@ -44,7 +44,6 @@ const store = createStore({
   },
   mutations: {
     changeUserBoolean(state) {
-      console.log("heee");
       state.user = true;
     },
     showPassword(state) {

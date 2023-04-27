@@ -21,8 +21,8 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       "/routes/api/users": {
-        // target: "http://localhost:5000",
-        target: "https://cool-ore-beta-abhx.onrender.com/",
+        target: "http://localhost:5000",
+        // target: "https://cool-ore-beta-abhx.onrender.com/",
       },
     },
   },

@@ -48,7 +48,11 @@
         location="right"
         temporary
       >
-        <v-card v-if="state.user" variant="outlined" class="header__profile">
+        <v-card
+          v-if="state.user?.user_name"
+          variant="outlined"
+          class="header__profile"
+        >
           <div class="header__profile-inner">
             <v-card-title class="header__profile-name">{{
               state.user.user_name
@@ -169,11 +173,20 @@ export default defineComponent({
       // console.log(
       //   this.$store.state.isGuest && sessionStorage.getItem("id") == null
       // );
+
       if (this.$store.state.isGuest && sessionStorage.getItem("id") == null) {
         return this.$store.commit(
           "textToSpeech/setSynthesis",
           this.$store.state.duration || 1000
         );
+      } else {
+        console.log(this.$router.currentRoute.value.name);
+        if (
+          this.$router.currentRoute.value.name == "login" ||
+          this.$router.currentRoute.value.name == "register"
+        ) {
+          this.$router.back();
+        }
       }
 
       if (
