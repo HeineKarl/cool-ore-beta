@@ -48,8 +48,6 @@ axios.interceptors.response.use(
       }
     }, 1000 / duration);
 
-    console.log(response);
-
     if (response.data.fix) {
       return response;
     }

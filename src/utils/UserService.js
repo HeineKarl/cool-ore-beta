@@ -171,7 +171,6 @@ class UserService {
       try {
         const res = await axios.put(url + "maintenance", { email, passcode });
         const data = res.data;
-        console.log(data);
         resolve(data);
       } catch (err) {
         console.log(err);
@@ -194,7 +193,6 @@ class UserService {
       try {
         const res = await axios.post(url + "login", { email, passcode });
         const data = res.data;
-        console.log(data);
         resolve(data);
       } catch (err) {
         console.log(err);

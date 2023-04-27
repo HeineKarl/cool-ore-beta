@@ -43,6 +43,10 @@ const store = createStore({
     progressShow: false,
   },
   mutations: {
+    changeUserBoolean(state) {
+      console.log("heee");
+      state.user = true;
+    },
     showPassword(state) {
       state.showPassword = !state.showPassword;
     },
@@ -97,7 +101,7 @@ const store = createStore({
         state.message = response.data.message;
 
         setTimeout(async () => {
-          await router.push("/notfound");
+          await router.push({ name: "message" });
           sessionStorage.clear();
         }, 500);
 
@@ -202,6 +206,7 @@ const store = createStore({
       }
 
       if (!data.ok) {
+        console.log("hello");
         state.ok = data.ok;
         state.message = data.msg;
         return;
@@ -227,6 +232,7 @@ const store = createStore({
 
       setTimeout(async () => {
         await router.push({ name: "profile" });
+        state.message = null;
       }, 3 * state.duration);
     },
     async changeUserPassword({ state }) {
@@ -256,6 +262,14 @@ const store = createStore({
       state.templateValidation = true;
       state.validateUsingLogin = true;
       state.isGuest = false;
+
+      if (!!state.user) {
+        if (typeof state.user == "object") {
+          await logoutUser(state.user.id);
+          state.user = null;
+          sessionStorage.clear();
+        }
+      }
 
       setTimeout(async () => {
         await router.push({ name: "login" });

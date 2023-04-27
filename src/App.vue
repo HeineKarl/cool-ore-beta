@@ -10,7 +10,7 @@
           <div v-if="state.templateValidation" class="header__collection">
             <v-btn
               @mouseover="textToSpeech"
-              v-if="!state.user"
+              v-if="typeof state.user === 'object' && !state.user"
               class="header__login"
               elevation="0"
               :to="{ name: 'login' }"
@@ -20,7 +20,7 @@
 
             <v-btn
               @mouseover="textToSpeech"
-              v-if="state.user"
+              v-if="typeof state.user === 'object' && state.user"
               class="header__vision"
               elevation="0"
               :to="{ name: 'vision-test' }"

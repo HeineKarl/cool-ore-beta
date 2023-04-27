@@ -6,6 +6,7 @@
         Don't have an account?
         <router-link :to="{ name: 'register' }">Register Now</router-link>
       </span>
+
       <div
         v-if="$store.state.message"
         :class="$store.state.ok ? 'success' : 'fail'"
@@ -36,6 +37,11 @@
             id="password"
           ></v-text-field>
         </div>
+        <span class="auth__reroute">
+          <router-link @click="changeUserBoolean" :to="{ name: 'maintenance' }"
+            >Forgot Password?</router-link
+          >
+        </span>
         <div class="auth__field">
           <v-btn class="auth__btn" variant="tonal" type="submit">Login</v-btn>
         </div>
@@ -67,10 +73,15 @@ export default defineComponent({
       commit("showPassword");
     }
 
+    function changeUserBoolean() {
+      commit("changeUserBoolean");
+    }
+
     return {
       state,
       verifyUser,
       showPassword,
+      changeUserBoolean,
     };
   },
 });
