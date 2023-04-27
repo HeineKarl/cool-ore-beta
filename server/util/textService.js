@@ -83,6 +83,48 @@ function destructureStr(str, secret) {
   return str.replace(secret, "");
 }
 
+function constructurePass(encrypted, secret) {
+  if (typeof secret !== "object")
+    return console.log(
+      "Secret must be an object with jwtHeader, jwtPayload, jwtSecret as literals"
+    );
+
+  const { cryptRearLeft, cryptRearRight } = secret;
+
+  let rearLeftPass = encrypted.slice(0, 20);
+  let rearMidPass = encrypted.slice(20, encrypted.length - 20);
+  let rearRightPass = encrypted.slice(encrypted.length - 20, encrypted.length);
+
+  let finalPass = `${rearLeftPass}${cryptRearLeft}${rearMidPass}${cryptRearRight}${rearRightPass}`;
+  return finalPass;
+}
+
+function destructurePass(decrypted, secret) {
+  if (typeof secret !== "object")
+    return console.log(
+      "Secret must be an object with jwtHeader, jwtPayload, jwtSecret as literals"
+    );
+
+  const { cryptRearLeft, cryptRearRight } = secret;
+
+  let rearLeftPass = decrypted.slice(0, 20 + cryptRearLeft.length);
+  let rearMidPass = decrypted.slice(
+    20 + cryptRearLeft.length,
+    decrypted.length - (20 + cryptRearRight.length)
+  );
+  let rearRightPass = decrypted.slice(
+    decrypted.length - (20 + cryptRearRight.length),
+    decrypted.length
+  );
+
+  let decryptedLeft = rearLeftPass.replace(cryptRearLeft, "");
+  let decryptedRight = rearRightPass.replace(cryptRearRight, "");
+
+  let finalPass = `${decryptedLeft}${rearMidPass}${decryptedRight}`;
+
+  return finalPass;
+}
+
 module.exports = {
   properCase,
   titleCase,
@@ -91,4 +133,6 @@ module.exports = {
   destructureStr,
   constructureJWT,
   destructureJWT,
+  constructurePass,
+  destructurePass,
 };

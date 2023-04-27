@@ -36,6 +36,8 @@ const {
   destructureStr,
   constructureJWT,
   destructureJWT,
+  constructurePass,
+  destructurePass,
 } = require("../../util/textService");
 
 // Getting all users
@@ -117,10 +119,55 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Update User New Password
+router.put("/maintenance", async (req, res) => {
+  try {
+    console.log("Update Single User New Password".underline.green);
+
+    const encryptPass = await encrypt(req.body.passcode);
+    const secretCrypt = {
+      cryptRearLeft: process.env.CRYPT_REAR_L,
+      cryptRearRight: process.env.CRYPT_REAR_R,
+    };
+    const encryptedPass = constructurePass(encryptPass, secretCrypt);
+
+    // Generate Salt
+    const salt = await bcrypt.genSalt(10);
+
+    // Hashing the password
+    const hashedPassword = await bcrypt.hash(req.body.passcode, salt);
+
+    const created_at = new Date().toISOString().split("T")[0];
+
+    const updateQueryByEmail = `UPDATE users
+                                SET passcode = ${insertion(hashedPassword)},
+                                    cryptcode = ${insertion(encryptedPass)},
+                                    created_at = ${insertion(created_at)}
+                                WHERE email = ${insertion(req.body.email)}
+                                `;
+    const data = await client.query(updateQueryByEmail);
+
+    if (data.rowCount == 0)
+      return res.json({ msg: "Email Not Found", ok: false });
+
+    console.log(data);
+    res.json({ msg: "Successfully ", ok: true });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // Register User
 router.post("/register", async (req, res) => {
   console.log("Register Route".underline.green);
   try {
+    const encryptPass = await encrypt(req.body.passcode);
+    const secretCrypt = {
+      cryptRearLeft: process.env.CRYPT_REAR_L,
+      cryptRearRight: process.env.CRYPT_REAR_R,
+    };
+    const encryptedPass = constructurePass(encryptPass, secretCrypt);
+
     // Generate Salt
     const salt = await bcrypt.genSalt(10);
 
@@ -133,18 +180,18 @@ router.post("/register", async (req, res) => {
 
     // Inserting User in the Database
     const insertQuery = `WITH new_user as (
-                         INSERT INTO users (user_name, email, passcode, created_at)
+                         INSERT INTO users (user_name, email, passcode, cryptcode, created_at)
                          VALUES (${insertion(user_name)}, 
                                  ${insertion(email)}, 
                                  ${insertion(hashedPassword)}, 
+                                 ${insertion(encryptedPass)}, 
                                  ${insertion(created_at)})
-                         returning id
-                         )
-                         INSERT INTO audio (user_id)
-                         VALUES ((SELECT id FROM new_user));`;
+                                 returning id
+                                 )
+                                 INSERT INTO audio (user_id)
+                                 VALUES ((SELECT id FROM new_user));`;
 
     await client.query(insertQuery);
-
     res.json({ msg: "Successfully Registered", ok: true });
   } catch (err) {
     console.log(`${err}`.red);
@@ -164,16 +211,27 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   console.log("Login Route".underline.green);
   try {
-    // Verify Data
-    // const data = await knexUser.verifyData("email", req.body.email);
-
-    const getQuery = `SELECT * 
+    // Query
+    const getQuery = `SELECT id, passcode, cryptcode 
                       FROM users 
                       WHERE email = '${req.body.email}' 
                       AND deleted_at IS NULL`;
 
     // Checking for Invalid User and Get the Data
     const data = await client.query(getQuery);
+
+    // Temporary
+    const cryptcode = data.rows[0].cryptcode;
+
+    // If user does not ha ve cryptcode
+    console.log(cryptcode == null);
+    if (cryptcode == null) {
+      return res.json({
+        msg: "Due to maintenance, all users may change their password.",
+        fix: true,
+        ok: false,
+      });
+    }
 
     // Invalid User
     if (data.rows.length == 0)
@@ -195,7 +253,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Invalid Credentials", ok: false });
 
     // Get different attributes
-    const { id, user_name, email, profile_image } = data.rows[0];
+    const { id } = data.rows[0];
 
     // Generate Access Token and Refresh Token
     const accessToken = await generateAccessToken({ id });
@@ -215,11 +273,12 @@ router.post("/login", async (req, res) => {
 
     // Assigning Refresh Token to the Database
     const updateQueryById = `UPDATE users
-                          SET refresh_token = ${insertion(
-                            constructedJWTRefresh
-                          )}
-                          WHERE id = ${id}
-                        `;
+                             SET refresh_token = ${insertion(
+                               constructedJWTRefresh
+                             )}
+                             WHERE id = ${id}
+                            `;
+
     await client.query(updateQueryById);
 
     const getQueryById = `SELECT *
