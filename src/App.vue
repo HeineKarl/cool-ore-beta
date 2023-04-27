@@ -1,10 +1,5 @@
 <template>
   <v-app>
-    <!-- <v-progress-linear
-      v-if="state.progressShow"
-      class="header__progress"
-      :model-value="state.progressVal"
-    ></v-progress-linear> -->
     <v-main>
       <header class="header app-bar">
         <div class="header__inner">
@@ -168,6 +163,19 @@ export default defineComponent({
   components: { Logo, CloseBtn, NavigationList },
   watch: {
     $route(to, from) {
+      // If the user is a guest, then don't generate token
+      // console.log(this.$store.state.isGuest);
+      // console.log(sessionStorage.getItem("id") == null);
+      // console.log(
+      //   this.$store.state.isGuest && sessionStorage.getItem("id") == null
+      // );
+      if (this.$store.state.isGuest && sessionStorage.getItem("id") == null) {
+        return this.$store.commit(
+          "textToSpeech/setSynthesis",
+          this.$store.state.duration || 1000
+        );
+      }
+
       if (
         to.name == "profile" ||
         to.name == "audio" ||
@@ -179,6 +187,9 @@ export default defineComponent({
     },
   },
   setup() {
+    // Initialize Store and Ref
+    const { state, commit, dispatch } = useStore();
+    const isNavOpen = ref(false);
     const appBarElevation = ref(0);
 
     window.addEventListener("scroll", (e) => {
@@ -189,11 +200,9 @@ export default defineComponent({
       }
     });
 
-    // Initialize Store and Ref
-    const { state, commit, dispatch } = useStore();
-    const isNavOpen = ref(false);
-
     window.addEventListener("load", () => {
+      // If the user is a guest, then don't generate token
+      if (state.isGuest && sessionStorage.length == 0) return;
       dispatch("generateToken");
     });
 
@@ -294,6 +303,8 @@ export default defineComponent({
 
   &__burger {
     background-color: var(--primary-color);
+
+    margin-left: 1rem;
   }
 
   &__login,

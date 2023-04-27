@@ -189,7 +189,7 @@ export const visionTest = {
         state.result.vision = "Normal Vision";
         state.result.desc =
           "All three types of cone cells, which are functioning normally, are used for normal color vision. Trichromacy is another name for normal color vision. Trichromats are people with normal color vision.";
-        state.vision_type = "Normal Vision";
+        state.vision_type = state.result.vision;
         state.end = true;
       }
 
@@ -221,9 +221,9 @@ export const visionTest = {
           }
         }
 
-        console.log(state.protan.length, "PROTAN");
-        console.log(state.deutan.length, "DEUTAN");
-        console.log(state.normal.length, "NORMAL");
+        // console.log(state.protan.length, "PROTAN");
+        // console.log(state.deutan.length, "DEUTAN");
+        // console.log(state.normal.length, "NORMAL");
 
         state.answer1 = "";
         state.answer2 = "";
@@ -252,6 +252,7 @@ export const visionTest = {
             state.result.vision = "Red Green Deficient / Undetermined";
             state.result.desc =
               "The most prevalent type of color blindness in humans is red-green color blindness. It occurs to those who are unable to perceive red and green hues in the same manner that those who have normal color vision do. ";
+            state.vision_type = state.result.vision;
           }
 
           return (state.end = true);

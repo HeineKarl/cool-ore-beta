@@ -166,12 +166,35 @@ class UserService {
     });
   }
 
+  static changeUserPassword(email, passcode) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.put(url + "maintenance", { email, passcode });
+        const data = res.data;
+        console.log(data);
+        resolve(data);
+      } catch (err) {
+        console.log(err);
+        if (err.response.status == 401) {
+          resolve(err.response.data);
+          return;
+        }
+        if (err.response.status == 404) {
+          resolve(err.response.data);
+        }
+
+        reject(err);
+      }
+    });
+  }
+
   // Login User
   static verifyUser(email, passcode) {
     return new Promise(async (resolve, reject) => {
       try {
         const res = await axios.post(url + "login", { email, passcode });
         const data = res.data;
+        console.log(data);
         resolve(data);
       } catch (err) {
         console.log(err);

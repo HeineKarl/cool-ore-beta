@@ -10,6 +10,7 @@
 import { useStore } from "vuex";
 
 export default {
+  name: "Message",
   setup() {
     const { state } = useStore();
 
@@ -17,9 +18,8 @@ export default {
   },
 
   created() {
-    console.log(this.$store.state.duration);
     setTimeout(() => {
-      this.$router.push("/login");
+      this.$router.push({ name: "login" });
     }, 2000);
   },
 };

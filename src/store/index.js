@@ -10,8 +10,14 @@ import { article } from "./modules/article";
 import router from "@/router";
 
 import UserService from "@/utils/UserService";
-const { getUser, insertUser, logoutUser, verifyUser, generateToken } =
-  UserService;
+const {
+  getUser,
+  insertUser,
+  logoutUser,
+  verifyUser,
+  generateToken,
+  changeUserPassword,
+} = UserService;
 
 const store = createStore({
   state: {
@@ -25,6 +31,7 @@ const store = createStore({
     isGuest: true,
     message: "",
     ok: false,
+    fix: false,
     user: null,
     username: "",
     email: "",
@@ -130,7 +137,7 @@ const store = createStore({
 
       sessionStorage.clear();
 
-      await router.push("/notfound");
+      await router.push({ name: "message" });
 
       setTimeout(async () => {
         state.user = null;
@@ -182,6 +189,18 @@ const store = createStore({
 
       const data = await verifyUser(state.email, state.password);
 
+      if (data.fix) {
+        state.fix = data.fix;
+        state.ok = data.ok;
+        state.message = data.msg;
+        state.isGuest = true;
+        setTimeout(async () => {
+          console.log("he");
+          await router.push({ name: "maintenance" });
+        }, 3 * state.duration);
+        return;
+      }
+
       if (!data.ok) {
         state.ok = data.ok;
         state.message = data.msg;
@@ -208,6 +227,38 @@ const store = createStore({
 
       setTimeout(async () => {
         await router.push({ name: "profile" });
+      }, 3 * state.duration);
+    },
+    async changeUserPassword({ state }) {
+      if (state.email == "" && state.password == "") {
+        state.message = "All fields are empty!";
+        return;
+      }
+
+      if (state.email == null || state.email == "") {
+        state.message = "Email is empty";
+        return;
+      }
+
+      if (state.password == null || state.password == "")
+        return (state.message = "Password is empty");
+
+      const data = await changeUserPassword(state.email, state.password);
+
+      if (!data.ok) {
+        state.ok = data.ok;
+        state.message = data.msg;
+        return;
+      }
+
+      state.message = data.msg;
+      state.ok = data.ok;
+      state.templateValidation = true;
+      state.validateUsingLogin = true;
+      state.isGuest = false;
+
+      setTimeout(async () => {
+        await router.push({ name: "login" });
       }, 3 * state.duration);
     },
   },

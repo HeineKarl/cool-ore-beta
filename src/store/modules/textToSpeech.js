@@ -29,7 +29,6 @@ export const textToSpeech = {
     setSynthesis(state, duration) {
       let voices, accents, accent, pitch, rate, volume, defaultVoice;
       voices = window.speechSynthesis.getVoices();
-      // window.addEventListener("load", () => {
       setTimeout(() => {
         voices = window.speechSynthesis.getVoices();
         accents = voices.map((voice) => voice.name);
@@ -39,8 +38,6 @@ export const textToSpeech = {
         rate = state.rate || 1;
         volume = state.volume || 1;
         defaultVoice = accents.findIndex((elaccent) => elaccent === accent);
-        // console.log(accent, state.textToSpeech.accent);
-        // console.log(voices.find((voice) => voice.default == true).name);
 
         state.accents = accents;
         state.accent = accent;
@@ -49,27 +46,7 @@ export const textToSpeech = {
         state.rate = rate;
         state.volume = volume;
         state.defaultVoice = defaultVoice;
-        // commit("textToSpeech/setValue", {
-        //   voices,
-        //   accents,
-        //   accent,
-        //   pitch,
-        //   rate,
-        //   volume,
-        //   defaultVoice,
-        // });
-
-        // this.setValue(state, {
-        //   voices,
-        //   accents,
-        //   accent,
-        //   pitch,
-        //   rate,
-        //   volume,
-        //   defaultVoice,
-        // });
       }, duration * 1.5);
-      // });
     },
 
     setValue(

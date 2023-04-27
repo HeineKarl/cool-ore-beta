@@ -17,9 +17,14 @@ const routes = [
     component: () => import("../views/LoginView.vue"),
   },
   {
-    path: "/notfound",
-    name: "notfound",
+    path: "/message",
+    name: "message",
     component: () => import("../views/NotFoundView.vue"),
+  },
+  {
+    path: "/maintenance",
+    name: "maintenance",
+    component: () => import("../views/MaintenanceView.vue"),
   },
   {
     path: "/about",
@@ -83,13 +88,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log(!store.state.isGuest);
-  if (!store.state.isGuest) {
-    if (to.name == "login" || to.name == "register") {
-      alert("You are accessing a restricted route!");
-      return { name: from.name };
-    }
-  }
+  // // console.log(!store.state.isGuest);
+  // if (!store.state.isGuest) {
+  //   if (to.name == "login" || to.name == "register") {
+  //     alert("You are accessing a restricted route!");
+  //     return { name: from.name };
+  //   }
+  // }
 
   let documentTitle = `Cool-ore | ${properCase(to.name)}`;
   if (to.params.title) {

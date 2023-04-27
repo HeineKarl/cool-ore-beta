@@ -17,11 +17,12 @@ export const navigationList = {
       },
       { id: 6, text: "Appearance", icon: "mdi-brush", name: "appearance" },
       { id: 7, text: "Vision Test", icon: "mdi-eye", name: "vision-test" },
-      // {
-      //   text: "Change Password",
-      //   icon: "mdi-lock-outline",
-      //   name: "change_password",
-      // },
+      {
+        id: 8,
+        text: "Change Password",
+        icon: "mdi-lock-outline",
+        name: "maintenance",
+      },
     ],
 
     navigationLists: [

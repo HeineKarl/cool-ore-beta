@@ -84,6 +84,7 @@
             'Deutan',
             'Tritan',
             'Achromatopsia',
+            'Red Green Deficient / Undetermined',
             'Prefer Not to say',
           ]"
           label="Color Vision Type"

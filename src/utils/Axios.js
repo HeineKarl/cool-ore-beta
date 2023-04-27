@@ -3,7 +3,7 @@ import store from "@/store/index";
 import router from "@/router";
 
 let axios = Axios.create({
-  baseURL: "http://localhost:5000",
+  // baseURL: "http://localhost:5000",
   baseURL: "https://cool-ore-beta-abhx.onrender.com/",
   withCredentials: true,
 });
@@ -47,6 +47,12 @@ axios.interceptors.response.use(
         clearInterval(interval);
       }
     }, 1000 / duration);
+
+    console.log(response);
+
+    if (response.data.fix) {
+      return response;
+    }
 
     // Only Token and Login commits user preferences
     if (

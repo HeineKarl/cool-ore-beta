@@ -136,11 +136,20 @@ export default {
     margin: auto;
     padding: 2rem;
     max-width: 40rem;
+    width: clamp(16rem, 80vw, 70rem);
   }
 
   &__result {
-    @include flex($justify: flex-start, $gap: 1rem);
+    @include flex($dir: column-reverse, $justify: flex-start, $gap: 1rem);
     padding: 1rem 0 0.5rem;
+    button {
+      @include font(
+        clamp(0.75rem, 3vw, 0.85rem),
+        $weight: 400,
+        $clr: var(--alert-color)
+      );
+      // width: 14rem;
+    }
   }
 
   &__ishihara {
@@ -184,6 +193,10 @@ export default {
       &__form {
         padding: 0 1rem;
         width: clamp(15rem, 40vw, 25rem);
+      }
+
+      &__result {
+        @include flex($justify: flex-start, $gap: 1rem);
       }
     }
   }

@@ -74,6 +74,8 @@ export default {
   &__stats,
   &__references,
   &__reference {
+    max-width: 50rem;
+    text-align: justify;
     @include flex($align: flex-start, $dir: column, $gap: 1rem);
     h3 {
       @include font(1.5rem, $weight: 600, $clr: var(--secondary-color));
