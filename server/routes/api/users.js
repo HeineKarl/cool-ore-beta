@@ -248,9 +248,7 @@ router.post("/login", async (req, res) => {
 
     // If not verified
     if (!verified)
-      return res
-        .status(401)
-        .json({ message: "Invalid Credentials", ok: false });
+      return res.status(401).json({ msg: "Invalid Credentials", ok: false });
 
     // Get different attributes
     const { id } = data.rows[0];
