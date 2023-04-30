@@ -48,6 +48,7 @@ $min-width-desktop: 60rem;
     // --light-color: hsl(199, 100%, 96%);
     --success-color: #175f36;
     --alert-color: #941010;
+    --alert-color-200: #ff3030;
     --mont: "Montserrat", sans-serif;
 
     --header-height: 12vh;
@@ -169,6 +170,10 @@ $min-width-desktop: 60rem;
 
   .router-link-active {
     text-decoration: underline;
+  }
+
+  .v-messages__message {
+    color: var(--alert-color-200) !important;
   }
 }
 

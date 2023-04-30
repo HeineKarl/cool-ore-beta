@@ -53,6 +53,7 @@ export const colors = {
 
           success: "#229755",
           alert: "#d41f1f",
+          alert_200: "#ff3030",
         },
       },
     ],
@@ -254,6 +255,7 @@ export const colors = {
 
           success: "#229755",
           alert: "#d41f1f",
+          alert_200: "#ff3030",
         },
       },
     ],

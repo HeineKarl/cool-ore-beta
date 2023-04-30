@@ -24,6 +24,8 @@ const store = createStore({
     templateValidation: false,
     validateUsingLogin: false,
     showPassword: false,
+    regEx: /([^'"`])\w+$/,
+    rules: [(v) => /^[^'"`%=]+$/.test(v) || "Cannot Use (', \", `, =, %)"],
     duration: 0,
     test: null,
     accessToken: "",
@@ -198,14 +200,12 @@ const store = createStore({
         state.message = data.msg;
         state.isGuest = true;
         setTimeout(async () => {
-          console.log("he");
           await router.push({ name: "maintenance" });
         }, 3 * state.duration);
         return;
       }
 
       if (!data.ok) {
-        console.log("hello");
         state.ok = data.ok;
         state.message = data.msg;
         return;
@@ -266,9 +266,9 @@ const store = createStore({
         if (typeof state.user == "object") {
           await logoutUser(state.user.id);
           state.user = null;
-          sessionStorage.clear();
         }
       }
+      sessionStorage.clear();
 
       setTimeout(async () => {
         await router.push({ name: "login" });

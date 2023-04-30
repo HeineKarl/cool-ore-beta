@@ -1,6 +1,6 @@
 <template>
   <div class="auth">
-    <form class="auth__form" @submit.prevent="verifyUser">
+    <v-form class="auth__form" ref="form" @submit.prevent="verifyUser">
       <div class="auth__heading">Login</div>
       <span class="auth__reroute">
         Don't have an account?
@@ -21,6 +21,7 @@
             variant="outlined"
             label="Email"
             v-model="$store.state.email"
+            :rules="state.rules"
             id="email"
             type="email"
           ></v-text-field>
@@ -34,6 +35,7 @@
             variant="outlined"
             label="Password"
             v-model="$store.state.password"
+            :rules="state.rules"
             id="password"
           ></v-text-field>
         </div>
@@ -46,27 +48,31 @@
           <v-btn class="auth__btn" variant="tonal" type="submit">Login</v-btn>
         </div>
       </div>
-    </form>
+    </v-form>
   </div>
 </template>
 
 <script>
-// import { mapActions, mapMutations } from "vuex";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, ref, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
   name: "LoginView",
+
   setup() {
     const { state, commit, dispatch } = useStore();
+    const form = ref(null);
 
     commit("resetForm");
 
     const userId = sessionStorage.getItem("id");
     commit("navigationList/handleAccountList", userId);
 
-    function verifyUser() {
-      dispatch("verifyUser");
+    async function verifyUser() {
+      const { valid } = await form.value.validate();
+      if (valid) {
+        dispatch("verifyUser");
+      }
     }
 
     function showPassword() {
@@ -79,6 +85,7 @@ export default defineComponent({
 
     return {
       state,
+      form,
       verifyUser,
       showPassword,
       changeUserBoolean,
@@ -96,6 +103,11 @@ export default defineComponent({
 .auth {
   // For the Navigation Thingy
   margin: var(--header-height) 0 0;
+
+  &__fields {
+    margin-top: 0.5rem;
+    @include flex($dir: column, $align: flex-start, $gap: 0.35rem);
+  }
 
   &__field {
     input {

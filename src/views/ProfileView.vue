@@ -1,7 +1,7 @@
 <template >
   <div v-if="state.templateValidation" class="profile">
     <div class="profile__heading">Profile</div>
-    <form class="profile__form">
+    <v-form ref="form" class="profile__form">
       <div class="profile__pic">
         <v-btn x-small class="profile__file" icon>
           <v-icon class="profile__camera" aria-hidden="false">
@@ -27,6 +27,7 @@
           variant="outlined"
           label="Username"
           v-model="state.user.user_name"
+          :rules="state.rules"
           id="username"
           type="text"
           hint="12 characters only"
@@ -38,6 +39,7 @@
           variant="outlined"
           label="First Name"
           v-model="state.user.first_name"
+          :rules="state.rules"
           id="firstname"
           type="text"
         >
@@ -47,6 +49,7 @@
           variant="outlined"
           label="Last Name"
           v-model="state.user.last_name"
+          :rules="state.rules"
           id="lastname"
           type="text"
         >
@@ -106,7 +109,7 @@
           <SolidBtn @click="handleUpdateDialog" text="Update Profile" />
         </div>
       </div>
-    </form>
+    </v-form>
 
     <v-dialog
       class="profile__dialog"
@@ -127,7 +130,7 @@
 </template>
   
 <script>
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 
@@ -142,7 +145,7 @@ export default defineComponent({
   setup() {
     const { state, commit, dispatch } = useStore();
     const router = useRouter();
-    const route = useRoute();
+    const form = ref(null);
 
     const userId = sessionStorage.getItem("id");
     commit("navigationList/handleAccountList", userId);
@@ -150,8 +153,11 @@ export default defineComponent({
     // if(route.fullPath)
     // dispatch("generateToken");
 
-    function updateProfile() {
-      console.log("Update Profile");
+    async function updateProfile() {
+      // console.log("Update Profile");
+
+      const { valid } = await form.value.validate();
+      if (!valid) return;
 
       const userProfile = {
         id: state.user.id,
@@ -172,7 +178,7 @@ export default defineComponent({
         dispatch("generateToken");
       }
 
-      setTimeout(updateDelay, 3 * state.duration);
+      // setTimeout(updateDelay, 3 * state.duration);
     }
 
     function handleUpdateDialog() {
@@ -192,6 +198,7 @@ export default defineComponent({
 
     return {
       state,
+      form,
       updateProfile,
       handleUpdateDialog,
       selectedFile,
@@ -256,6 +263,9 @@ export default defineComponent({
   }
 
   &__fields {
+    // @include flex($dir: column, $gap: 2.5rem);
+    display: grid;
+    gap: 1rem;
     width: 100%;
   }
 

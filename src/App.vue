@@ -52,23 +52,26 @@
           v-if="state.user?.user_name"
           variant="outlined"
           class="header__profile"
+          :to="{ name: 'profile' }"
         >
           <div class="header__profile-inner">
-            <v-card-title class="header__profile-name">{{
-              state.user.user_name
-            }}</v-card-title>
-            <v-card-text class="header__profile-text">{{
-              state.user.bio ? state.user.bio.slice(0, 30) + "..." : null
-            }}</v-card-text>
+            <div class="header__profile-content">
+              <v-card-title class="header__profile-name">{{
+                state.user.user_name
+              }}</v-card-title>
+              <v-card-text class="header__profile-text">{{
+                state.user.bio ? state.user.bio.slice(0, 30) + "..." : null
+              }}</v-card-text>
+            </div>
           </div>
-          <v-avatar size="50">
+          <div class="header__profile-image">
             <img
               :src="
                 state.user.profile_image ||
                 require('@/assets/img/default_profile.png')
               "
             />
-          </v-avatar>
+          </div>
         </v-card>
 
         <div v-else class="header__subheader">
@@ -180,7 +183,7 @@ export default defineComponent({
           this.$store.state.duration || 1000
         );
       } else {
-        console.log(this.$router.currentRoute.value.name);
+        // console.log(this.$router.currentRoute.value.name);
         if (
           this.$router.currentRoute.value.name == "login" ||
           this.$router.currentRoute.value.name == "register"
@@ -193,7 +196,8 @@ export default defineComponent({
         to.name == "profile" ||
         to.name == "audio" ||
         to.name == "vision-test" ||
-        to.name == "appearance"
+        to.name == "appearance" ||
+        to.name == "maintenance"
       ) {
         this.$store.dispatch("generateToken");
       }
@@ -332,16 +336,30 @@ export default defineComponent({
   }
 
   &__profile {
-    @include flex($gap: 1rem, $dir: row-reverse);
+    @include flex($justify: space-between, $dir: row-reverse);
     background-color: var(--primary-color);
     border: 1px solid var(--secondary-color);
+    // width: 80%;
     margin: 1.5rem 1rem;
     padding: 0.5rem 0;
     // padding: 1rem 2rem 1rem 1rem;
 
     &-inner {
-      @include flex($dir: column, $align: flex-start);
+      // @include flex($dir: column, $align: flex-start);
+      @include flex($justify: space-between);
       // height: 2rem;
+    }
+
+    &-content {
+      width: 8rem;
+    }
+
+    &-image {
+      --area: 3rem;
+      border-radius: 50%;
+      width: var(--area);
+      height: var(--area);
+      overflow: hidden;
     }
 
     &-name {

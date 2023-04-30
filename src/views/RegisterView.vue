@@ -1,6 +1,6 @@
 <template>
   <div class="auth">
-    <form class="auth__form" @submit.prevent="insertUser">
+    <v-form class="auth__form" ref="form" @submit.prevent="insertUser">
       <div class="auth__heading">Register</div>
       <span class="auth__reroute">
         Have an account?
@@ -20,6 +20,7 @@
             variant="outlined"
             label="Username"
             v-model="state.username"
+            :rules="state.rules"
             id="username"
             type="username"
           ></v-text-field>
@@ -30,9 +31,9 @@
             variant="outlined"
             label="Email"
             v-model="state.email"
+            :rules="state.rules"
             id="email"
             type="email"
-            :rules="[(v) => !!v || 'This field is required']"
           ></v-text-field>
         </div>
         <div class="auth__field">
@@ -44,6 +45,7 @@
             variant="outlined"
             label="Password"
             v-model="state.password"
+            :rules="state.rules"
             id="password"
           ></v-text-field>
         </div>
@@ -53,12 +55,12 @@
           >
         </div>
       </div>
-    </form>
+    </v-form>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -66,21 +68,48 @@ export default defineComponent({
 
   setup() {
     const { state, commit, dispatch } = useStore();
-
+    const form = ref(null);
     commit("resetForm");
 
-    function insertUser() {
-      dispatch("insertUser");
+    async function insertUser() {
+      const { valid } = await form.value.validate();
+      if (valid) {
+        dispatch("insertUser");
+      }
     }
 
     function showPassword() {
       commit("showPassword");
     }
 
-    return { state, insertUser, showPassword };
+    return { state, form, insertUser, showPassword };
   },
 });
 </script>
 
 <style lang="scss">
+.auth {
+  // For the Navigation Thingy
+  margin: var(--header-height) 0 0;
+
+  &__fields {
+    @include flex($dir: column, $align: flex-start, $gap: 0.35rem);
+  }
+
+  &__field {
+    input {
+      @include font(1rem, $weight: 300, $clr: var(--secondary-color));
+    }
+  }
+
+  &__field input[type="password"] {
+    @include font(1.5rem, $weight: 300, $clr: var(--secondary-color));
+  }
+
+  &__reroute {
+    a {
+      @include font(0.85rem, $weight: 500, $clr: var(--success-color));
+    }
+  }
+}
 </style>
