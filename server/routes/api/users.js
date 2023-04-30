@@ -31,69 +31,67 @@ const { refreshTime, nextWeek } = require("../../util/timeService");
 // Validation
 const validation = require("../../util/validation");
 const {
-  properCase,
-  constructureStr,
-  destructureStr,
   constructureJWT,
   destructureJWT,
   constructurePass,
   destructurePass,
+  sqlValidation,
 } = require("../../util/textService");
 
 // Getting all users
-router.get("/all", async (req, res) => {
-  try {
-    console.log("Get All Users".underline.green);
+// router.get("/all", validation, async (req, res) => {
+//   try {
+//     console.log("Get All Users".underline.green);
 
-    const getQuery = `SELECT * FROM users`;
+//     const getQuery = `SELECT * FROM users`;
 
-    client.query(getQuery, (err, result) => {
-      if (!err)
-        return res.status(200).json({
-          data: result.rows,
-          msg: "Get All Users Successfully",
-          ok: true,
-        });
+//     client.query(getQuery, (err, result) => {
+//       if (!err)
+//         return res.status(200).json({
+//           data: result.rows,
+//           msg: "Get All Users Successfully",
+//           ok: true,
+//         });
 
-      res.status(500).json({
-        error: err,
-        msg: err.message,
-        ok: false,
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
+//       res.status(500).json({
+//         error: err,
+//         msg: err.message,
+//         ok: false,
+//       });
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 // Geetting Active Users
-router.get("/", async (req, res) => {
-  try {
-    console.log("Get Active Users".underline.green);
+// router.get("/", validation, async (req, res) => {
+//   try {
+//     console.log("Get Active Users".underline.green);
 
-    const getQuery = `SELECT * FROM users WHERE deleted_at IS NULL`;
+//     const getQuery = `SELECT * FROM users WHERE deleted_at IS NULL`;
 
-    client.query(getQuery, (err, result) => {
-      if (!err)
-        return res.status(200).json({
-          data: result.rows,
-          msg: "Get Active Users Successfully",
-          ok: true,
-        });
+//     client.query(getQuery, (err, result) => {
+//       if (!err)
+//         return res.status(200).json({
+//           data: result.rows,
+//           msg: "Get Active Users Successfully",
+//           ok: true,
+//         });
 
-      res.status(500).json({
-        error: err,
-        msg: err.message,
-        ok: false,
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
+//       res.status(500).json({
+//         error: err,
+//         msg: err.message,
+//         ok: false,
+//       });
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 // Getting Specific User
-router.get("/:id", async (req, res) => {
+router.get("/:id", validation, async (req, res) => {
   try {
     console.log("Get Single User".underline.green);
 
@@ -154,6 +152,12 @@ router.put("/maintenance", async (req, res) => {
     res.json({ msg: "Successfully ", ok: true });
   } catch (err) {
     console.log(err);
+
+    if (err.routine == "boolin" || err.routine == "varchar") {
+      return res
+        .status(404)
+        .json({ err: err.message, msg: "Invalid Input", ok: false });
+    }
   }
 });
 
@@ -175,7 +179,9 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.passcode, salt);
 
     // Creating user
-    const { user_name, email } = req.body;
+    // const { user_name, email } = req.body;
+    let user_name = sqlValidation(req.body.user_name);
+    let email = req.body.email;
     const created_at = new Date().toISOString().split("T")[0];
 
     // Inserting User in the Database
@@ -201,9 +207,17 @@ router.post("/register", async (req, res) => {
         .status(409)
         .json({ err: err.message, msg: "Email is already used", ok: false });
 
+    if (err.routine == "boolin" || err.routine == "varchar") {
+      return res
+        .status(404)
+        .json({ err: err.message, msg: "Invalid Input", ok: false });
+    }
+
     // If server crashed or bad request
-    res.status(500).json({ message: "There is a bad request", ok: false });
-    console.error(`Error at Post Request --> ${err}`);
+    res
+      .status(500)
+      .json({ err: err.message, msg: "There is a bad request", ok: false });
+    console.error(`Error at Post Request --> ${err}`.red);
   }
 });
 
@@ -211,6 +225,8 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   console.log("Login Route".underline.green);
   try {
+    console.log(req.body.email, req.body.passcode);
+
     // Query
     const getQuery = `SELECT id, passcode, cryptcode 
                       FROM users 
@@ -220,11 +236,10 @@ router.post("/login", async (req, res) => {
     // Checking for Invalid User and Get the Data
     const data = await client.query(getQuery);
 
-    // Temporary
+    // Crypted Code for Retrival of Password
     const cryptcode = data.rows[0].cryptcode;
 
     // If user does not ha ve cryptcode
-    console.log(cryptcode == null);
     if (cryptcode == null) {
       return res.json({
         msg: "Due to maintenance, all users may change their password.",
@@ -232,11 +247,23 @@ router.post("/login", async (req, res) => {
         ok: false,
       });
     }
+    // Secret String Injection
+    const secretCrypt = {
+      cryptRearLeft: process.env.CRYPT_REAR_L,
+      cryptRearRight: process.env.CRYPT_REAR_R,
+    };
+
+    const destructuredPass = destructurePass(cryptcode, secretCrypt);
+    const decryptedPass = await decrypt(destructuredPass);
+
+    // If password is wrong
+    if (req.body.passcode !== decryptedPass)
+      return res.status(401).json({ msg: "Invalid Credentials", ok: false });
 
     // Invalid User
     if (data.rows.length == 0)
       return res.status(401).json({
-        msg: "Invalid User or No User",
+        msg: "Invalid User",
         ok: false,
       });
 
@@ -289,7 +316,7 @@ router.post("/login", async (req, res) => {
     const user = await client.query(getQueryById);
 
     const userData = user.rows[0];
-
+    console.log(userData);
     const credentials = {
       id: userData.id,
       user_name: userData.user_name,
@@ -476,17 +503,15 @@ router.put("/profile", async (req, res) => {
 
   try {
     // Getting the data from the req body
-    const {
-      id,
-      user_name,
-      profile_image,
-      first_name,
-      last_name,
-      age,
-      gender,
-      vision_type,
-      bio,
-    } = req.body;
+    let id = req.body.id;
+    let user_name = sqlValidation(req.body.user_name);
+    let profile_image = req.body.profile_image;
+    let first_name = sqlValidation(req.body.first_name);
+    let last_name = sqlValidation(req.body.last_name);
+    let age = req.body.age;
+    let gender = req.body.gender;
+    let vision_type = req.body.vision_type;
+    let bio = sqlValidation(req.body.bio);
 
     // Update the Data in the Database
     const updateQueryById = `UPDATE users 
@@ -503,9 +528,15 @@ router.put("/profile", async (req, res) => {
 
     await client.query(updateQueryById);
 
-    res.status(200).json({ message: "Profile Successfully Updated" });
+    res.status(200).json({ msg: "Profile Successfully Updated", ok: true });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
+    res.status(500).json({ msg: "Invalid Input", ok: false });
+    // if (err.routine == "boolin" || err.routine == "varchar") {
+    //   return res
+    //     .status(404)
+    //     .json({ err: err.message, msg: "Invalid Input", ok: false });
+    // }
   }
 });
 

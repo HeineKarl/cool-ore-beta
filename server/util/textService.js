@@ -125,7 +125,45 @@ function destructurePass(decrypted, secret) {
   return finalPass;
 }
 
+function countChar(str, letter) {
+  let letterCount = 0;
+  for (let position = 0; position < str.length; position++) {
+    if (str.charAt(position) == letter) {
+      letterCount += 1;
+    }
+  }
+  return letterCount;
+}
+
+function popChar(string, count, searchVal) {
+  let str = string;
+  let i = 0;
+  do {
+    i++;
+    str = str.replace(searchVal, "");
+  } while (i < count);
+
+  return str;
+}
+
+function sqlValidation(string) {
+  let strBackTick = popChar(string, countChar(string, "`"), "`");
+  let strSingleQuote = popChar(strBackTick, countChar(strBackTick, "'"), "'");
+  let strDoubleQuote = popChar(
+    strSingleQuote,
+    countChar(strSingleQuote, '"'),
+    '"'
+  );
+  let strPercent = popChar(strDoubleQuote, countChar(strDoubleQuote, "%"), "%");
+  let final = strPercent;
+
+  return final;
+}
+
 module.exports = {
+  sqlValidation,
+  popChar,
+  countChar,
   properCase,
   titleCase,
   splitText,
