@@ -201,7 +201,7 @@ const store = createStore({
         state.isGuest = true;
         setTimeout(async () => {
           await router.push({ name: "maintenance" });
-        }, 3 * state.duration);
+        }, 25 * state.duration);
         return;
       }
 

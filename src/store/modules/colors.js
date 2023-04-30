@@ -108,7 +108,7 @@ export const colors = {
           // dark_color_600: "#101010",
 
           success: "#4550d4",
-          alert: "#fdd200",
+          alert: "#d6be26",
         },
       },
       {

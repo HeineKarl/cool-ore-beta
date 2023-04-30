@@ -178,7 +178,7 @@ export default defineComponent({
         dispatch("generateToken");
       }
 
-      // setTimeout(updateDelay, 3 * state.duration);
+      setTimeout(updateDelay, 5 * state.duration);
     }
 
     function handleUpdateDialog() {
