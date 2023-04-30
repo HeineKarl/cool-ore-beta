@@ -149,7 +149,7 @@ router.put("/maintenance", async (req, res) => {
       return res.json({ msg: "Email Not Found", ok: false });
 
     console.log(data);
-    res.json({ msg: "Successfully ", ok: true });
+    res.json({ msg: "User Successfully Updated", ok: true });
   } catch (err) {
     console.log(err);
 
@@ -236,6 +236,13 @@ router.post("/login", async (req, res) => {
     // Checking for Invalid User and Get the Data
     const data = await client.query(getQuery);
 
+    // Invalid User
+    if (data.rowCount == 0)
+      return res.status(401).json({
+        msg: "Invalid User",
+        ok: false,
+      });
+
     // Crypted Code for Retrival of Password
     const cryptcode = data.rows[0].cryptcode;
 
@@ -259,13 +266,6 @@ router.post("/login", async (req, res) => {
     // If password is wrong
     if (req.body.passcode !== decryptedPass)
       return res.status(401).json({ msg: "Invalid Credentials", ok: false });
-
-    // Invalid User
-    if (data.rows.length == 0)
-      return res.status(401).json({
-        msg: "Invalid User",
-        ok: false,
-      });
 
     // Compare the Password
     const verified = await bcrypt.compare(
@@ -316,7 +316,7 @@ router.post("/login", async (req, res) => {
     const user = await client.query(getQueryById);
 
     const userData = user.rows[0];
-    console.log(userData);
+
     const credentials = {
       id: userData.id,
       user_name: userData.user_name,
