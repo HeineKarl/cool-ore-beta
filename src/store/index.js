@@ -179,7 +179,10 @@ const store = createStore({
     },
     // Login User
     async verifyUser({ state }) {
-      if (state.email == "" && state.password == "") {
+      if (
+        (state.email == "" && state.password == "") ||
+        (state.email == null && state.password == null)
+      ) {
         state.message = "All fields are empty!";
         return;
       }
@@ -201,7 +204,7 @@ const store = createStore({
         state.isGuest = true;
         setTimeout(async () => {
           await router.push({ name: "maintenance" });
-        }, 25 * state.duration);
+        }, 5 * state.duration);
         return;
       }
 
@@ -232,21 +235,29 @@ const store = createStore({
       setTimeout(async () => {
         await router.push({ name: "profile" });
         state.message = null;
-      }, 3 * state.duration);
+      }, 2 * state.duration);
     },
     async changeUserPassword({ state }) {
-      if (state.email == "" && state.password == "") {
+      if (
+        (state.email == "" && state.password == "") ||
+        (state.email == null && state.password == null)
+      ) {
+        state.ok = false;
         state.message = "All fields are empty!";
         return;
       }
 
       if (state.email == null || state.email == "") {
+        state.ok = false;
         state.message = "Email is empty";
         return;
       }
 
-      if (state.password == null || state.password == "")
-        return (state.message = "Password is empty");
+      if (state.password == null || state.password == "") {
+        state.ok = false;
+        state.message = "Password is empty";
+        return;
+      }
 
       const data = await changeUserPassword(state.email, state.password);
 

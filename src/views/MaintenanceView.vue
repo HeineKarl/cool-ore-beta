@@ -59,7 +59,9 @@ export default defineComponent({
     const form = ref(null);
     const isUserId = ref(!sessionStorage.getItem("id"));
 
-    commit("resetForm");
+    if (!sessionStorage.getItem("id")) {
+      commit("resetForm");
+    }
 
     // if the window loads
     if (

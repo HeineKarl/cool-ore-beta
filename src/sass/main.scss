@@ -76,6 +76,11 @@ $min-width-desktop: 60rem;
     overflow: hidden;
   }
 
+  input {
+    box-shadow: 200px 200px var(--primary-color) inset;
+    -webkit-text-fill-color: var(--secondary-color);
+  }
+
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -92,13 +97,6 @@ $min-width-desktop: 60rem;
     text-decoration: none;
     color: var(--secondary-color);
     font-size: 0.9rem;
-
-    // &:hover,
-    // &:active,
-    // &:focus {
-    //   font-size: 1.25rem;
-    //   font-weight: 500;
-    // }
   }
 
   @keyframes slide-design-horizontal {
@@ -116,46 +114,6 @@ $min-width-desktop: 60rem;
     to {
       transform: translateY(2rem);
     }
-  }
-
-  // button {
-  //   background-color: black;
-  //   color: white;
-  //   outline: 0;
-  //   border: 0;
-  //   padding: 0.35rem 0.5rem;
-  //   border-radius: 5px;
-  // }
-
-  // .v-list {
-  //   &:hover,
-  //   &:active,
-  //   &:focus {
-  //     font-size: 1rem;
-  //     font-weight: 500;
-  //   }
-  // }
-
-  // .v-list-item {
-  //   &:hover,
-  //   &:active,
-  //   &:focus {
-  //     font-size: 1rem;
-  //     font-weight: 500;
-  //   }
-  // }
-
-  // .v-list-item-title {
-  //   &:hover,
-  //   &:active,
-  //   &:focus {
-  //     font-size: 1rem;
-  //     font-weight: 500;
-  //   }
-  // }
-
-  .ponder {
-    background: green;
   }
 
   footer {
